@@ -192,6 +192,7 @@ Create FastAPI routes for user authentication with rate limiting.
 ---
 
 ### [ ] Step: TMDB API Integration
+<!-- chat-id: 25f3f715-b556-4412-8b86-6c10f2c6eae8 -->
 
 Create TMDB API client with caching support.
 
