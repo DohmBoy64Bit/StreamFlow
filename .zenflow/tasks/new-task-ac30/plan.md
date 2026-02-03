@@ -274,7 +274,8 @@ Create endpoints for browsing and searching content via TMDB.
 
 ---
 
-### [ ] Step: Vidsrc Integration & Watch Endpoints
+### [x] Step: Vidsrc Integration & Watch Endpoints
+<!-- chat-id: 3c5af371-aaf8-4a4a-ac7e-1bba9ccc3dcc -->
 
 Implement video player URL generation and watch history tracking.
 
