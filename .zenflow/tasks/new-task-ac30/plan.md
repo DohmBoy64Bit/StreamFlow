@@ -444,7 +444,8 @@ Initialize React frontend with authentication flow.
 
 ---
 
-### [ ] Step: Frontend - Homepage & Content Browsing
+### [x] Step: Frontend - Homepage & Content Browsing
+<!-- chat-id: 8f3f2a13-858a-45f0-98d7-7b81a168864c -->
 
 Create Netflix-style homepage with carousels and content pages.
 

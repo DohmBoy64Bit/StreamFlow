@@ -4,6 +4,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Recover from './pages/Recover';
+import Search from './pages/Search';
+import Movie from './pages/Movie';
+import Show from './pages/Show';
 
 function App() {
   return (
@@ -17,6 +20,30 @@ function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute>
+                <Search />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/movie/:id"
+            element={
+              <ProtectedRoute>
+                <Movie />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/show/:id"
+            element={
+              <ProtectedRoute>
+                <Show />
               </ProtectedRoute>
             }
           />
