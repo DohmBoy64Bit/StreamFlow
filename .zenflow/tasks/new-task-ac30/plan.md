@@ -53,7 +53,7 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 
 ---
 
-### [ ] Step: Project Setup & Core Infrastructure
+### [x] Step: Project Setup & Core Infrastructure
 <!-- chat-id: 2cbe3fbc-1cb8-4000-ba5e-42dd41a7781b -->
 
 Initialize backend and frontend project structures with development environment.
@@ -86,6 +86,7 @@ Initialize backend and frontend project structures with development environment.
 ---
 
 ### [ ] Step: Database Models & Migrations
+<!-- chat-id: 7516c7ca-3750-4dd1-b238-be060a2aafdd -->
 
 Create SQLAlchemy models and initial database schema.
 
