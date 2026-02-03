@@ -124,9 +124,7 @@ const Home = () => {
 
       <div className="relative h-[80vh] bg-gradient-to-b from-netflix-gray-dark to-netflix-black flex items-center justify-center">
         <div className="text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            Welcome to StreamFlow
-          </h1>
+          <img src="/assets/logo.jpg" alt="StreamFlow" className="h-32 md:h-40 mx-auto mb-8" />
           <p className="text-xl md:text-2xl text-gray-400 mb-8">
             Unlimited movies, TV shows, and more
           </p>

@@ -17,8 +17,8 @@ const Navbar = () => {
     <nav className="bg-netflix-gray-dark shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <Link to={ROUTES.HOME} className="text-3xl font-bold text-netflix-red">
-            StreamFlow
+          <Link to={ROUTES.HOME} className="flex items-center">
+            <img src="/assets/logo.jpg" alt="StreamFlow" className="h-12 md:h-14" />
           </Link>
 
           <button
