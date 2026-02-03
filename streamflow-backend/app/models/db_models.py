@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import (
     Boolean,
@@ -58,8 +57,8 @@ class WatchHistory(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     tmdb_id: Mapped[int] = mapped_column(Integer, nullable=False)
     media_type: Mapped[str] = mapped_column(String(20), nullable=False)
-    season_number: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    episode_number: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    season_number: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    episode_number: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     last_position: Mapped[int] = mapped_column(Integer, default=0)
     watched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
 
