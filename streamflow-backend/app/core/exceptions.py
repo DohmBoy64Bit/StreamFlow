@@ -1,26 +1,26 @@
-class StreamFlowException(Exception):
+class StreamFlowError(Exception):
     pass
 
 
-class AuthenticationError(StreamFlowException):
+class AuthenticationError(StreamFlowError):
     pass
 
 
-class UnauthorizedError(StreamFlowException):
+class UnauthorizedError(StreamFlowError):
     pass
 
 
-class NotFoundError(StreamFlowException):
+class NotFoundError(StreamFlowError):
     pass
 
 
-class ValidationError(StreamFlowException):
+class ValidationError(StreamFlowError):
     pass
 
 
-class ExternalAPIError(StreamFlowException):
+class ExternalAPIError(StreamFlowError):
     pass
 
 
-class RateLimitExceededError(StreamFlowException):
+class RateLimitExceededError(StreamFlowError):
     pass
