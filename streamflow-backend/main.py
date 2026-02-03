@@ -6,6 +6,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.api.routes.auth import router as auth_router
+from app.api.routes.lists import router as lists_router
 from app.api.routes.movies import router as movies_router
 from app.api.routes.tv import router as tv_router
 from app.api.routes.vidsrc import router as vidsrc_router
@@ -43,6 +44,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["authentication"])
+app.include_router(lists_router, prefix="/api/v1/lists", tags=["lists"])
 app.include_router(movies_router, prefix="/api/v1/movies", tags=["movies"])
 app.include_router(tv_router, prefix="/api/v1/tv", tags=["tv"])
 app.include_router(watch_router, prefix="/api/v1/watch", tags=["watch"])
