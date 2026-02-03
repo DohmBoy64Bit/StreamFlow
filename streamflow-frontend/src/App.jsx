@@ -7,6 +7,8 @@ import Recover from './pages/Recover';
 import Search from './pages/Search';
 import Movie from './pages/Movie';
 import Show from './pages/Show';
+import Watch from './pages/Watch';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -44,6 +46,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Show />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/watch/:type/:id"
+            element={
+              <ProtectedRoute>
+                <Watch />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />

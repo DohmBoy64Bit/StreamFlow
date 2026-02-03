@@ -500,6 +500,7 @@ Create Netflix-style homepage with carousels and content pages.
 ---
 
 ### [ ] Step: Frontend - Video Player & Watch History
+<!-- chat-id: 5b35ab20-8c5b-49ca-9e1c-1aa063ed4798 -->
 
 Integrate Vidsrc player with watch position tracking.
 

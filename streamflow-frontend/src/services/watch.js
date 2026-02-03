@@ -1,29 +1,36 @@
 import api from './api';
-import { API_ENDPOINTS } from '../utils/constants';
 
 export const saveWatchPosition = async (tmdbId, mediaType, season, episode, position) => {
-  const response = await api.post(API_ENDPOINTS.WATCH.HISTORY, {
+  const payload = {
     tmdb_id: tmdbId,
     media_type: mediaType,
-    season_number: season,
-    episode_number: episode,
     last_position: position,
-  });
+  };
+
+  if (mediaType === 'tv' && season !== undefined && episode !== undefined) {
+    payload.season_number = season;
+    payload.episode_number = episode;
+  }
+
+  const response = await api.post('/watch/history', payload);
   return response.data;
 };
 
 export const getResumePosition = async (tmdbId, mediaType, season, episode) => {
-  const params = { media_type: mediaType };
-  if (season) params.season = season;
-  if (episode) params.episode = episode;
+  const params = new URLSearchParams({
+    media_type: mediaType,
+  });
 
-  const response = await api.get(API_ENDPOINTS.WATCH.RESUME(tmdbId), { params });
+  if (mediaType === 'tv' && season !== undefined && episode !== undefined) {
+    params.append('season', season);
+    params.append('episode', episode);
+  }
+
+  const response = await api.get(`/watch/resume/${tmdbId}?${params.toString()}`);
   return response.data;
 };
 
 export const getWatchHistory = async (limit = 20, offset = 0) => {
-  const response = await api.get(API_ENDPOINTS.WATCH.HISTORY, {
-    params: { limit, offset },
-  });
+  const response = await api.get(`/watch/history?limit=${limit}&offset=${offset}`);
   return response.data;
 };
