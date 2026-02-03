@@ -149,7 +149,8 @@ Implement core security functions and authentication business logic.
 
 ---
 
-### [ ] Step: Authentication API Endpoints
+### [x] Step: Authentication API Endpoints
+<!-- chat-id: 1729934c-6fc1-4239-8456-b308efaa8d90 -->
 
 Create FastAPI routes for user authentication with rate limiting.
 
@@ -212,6 +213,12 @@ Create TMDB API client with caching support.
   - Optional: In-memory caching with TTL (1 hour for most, 24h for details, indefinite for genres)
 - Create `app/schemas/movie.py` and `app/schemas/tv.py`:
   - Pydantic schemas for TMDB responses (simplified for frontend)
+  - Use:
+    - API Read Access Token: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNGFkMWExM2I4NjViMzNiY2RlNDY5YjEwZGU0ZmMzMiIsIm5iZiI6MTY5NDI5NjIxMi4yODYsInN1YiI6IjY0ZmNlODk0Zjg1OTU4MDEzYThkZDYzZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._DPfw1zetDjVFDYBBvJnOnvaWVOd0X3caiXog2EsQyg
+
+    - API Key: 04ad1a13b865b33bcde469b10de4fc32
+
+    [Not Sure if Read access token is needed or just the api key]
 
 **Tests:**
 - `tests/test_tmdb_client.py`:

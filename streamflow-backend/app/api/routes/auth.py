@@ -1,7 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_current_user
 from app.core.database import get_db
+from app.core.middleware import limiter
+from app.models.db_models import User
 from app.schemas.auth import (
     PasswordRecoveryRequest,
     TokenResponse,
@@ -24,13 +29,15 @@ router = APIRouter()
 
 
 @router.post("/register", response_model=UserRegisterResponse)
+@limiter.limit("3/hour")
 async def register(
-    request: UserRegisterRequest,
-    db: Session = Depends(get_db)
+    request: Request,
+    user_request: UserRegisterRequest,
+    db: Annotated[Session, Depends(get_db)]
 ) -> UserRegisterResponse:
     """Register a new user account."""
     try:
-        user, recovery_codes = register_user(db, request.username, request.password)
+        user, recovery_codes = register_user(db, user_request.username, user_request.password)
 
         return UserRegisterResponse(
             user=UserResponse(
@@ -45,15 +52,16 @@ async def register(
 
 
 @router.post("/login", response_model=TokenResponse)
+@limiter.limit("5/15minutes")
 async def login(
-    request: UserLoginRequest,
-    db: Session = Depends(get_db)
+    request: Request,
+    user_request: UserLoginRequest,
+    db: Annotated[Session, Depends(get_db)]
 ) -> TokenResponse:
     """Authenticate a user and return an access token."""
     try:
-        user = authenticate_user(db, request.username, request.password)
+        user = authenticate_user(db, user_request.username, user_request.password)
 
-        # Create access token
         access_token = create_access_token(data={"sub": str(user.id), "username": user.username})
 
         return TokenResponse(access_token=access_token)
@@ -62,15 +70,29 @@ async def login(
 
 
 @router.post("/recover-password")
+@limiter.limit("3/hour")
 async def recover_password_endpoint(
-    request: PasswordRecoveryRequest,
-    db: Session = Depends(get_db)
+    request: Request,
+    recovery_request: PasswordRecoveryRequest,
+    db: Annotated[Session, Depends(get_db)]
 ):
     """Recover password using a recovery code."""
     try:
-        recover_password(db, request.username, request.recovery_code, request.new_password)
+        recover_password(db, recovery_request.username, recovery_request.recovery_code, recovery_request.new_password)
         return {"message": "Password successfully updated"}
     except InvalidRecoveryCodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception:
         raise HTTPException(status_code=400, detail="Password recovery failed")
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_current_user_info(
+    current_user: Annotated[User, Depends(get_current_user)]
+) -> UserResponse:
+    """Get current authenticated user information."""
+    return UserResponse(
+        id=str(current_user.id),
+        username=current_user.username,
+        created_at=current_user.created_at.isoformat(),
+    )

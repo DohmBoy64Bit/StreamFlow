@@ -2,20 +2,21 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.api.routes.auth import router as auth_router
 from app.config import settings
 from app.core.database import engine
+from app.core.middleware import global_exception_handler, limiter
 from app.models.db_models import Base
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Handle application startup and shutdown events."""
-    # Create database tables
     Base.metadata.create_all(bind=engine)
     yield
-    # Cleanup (if needed)
 
 
 app = FastAPI(
@@ -25,7 +26,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS middleware
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_exception_handler(Exception, global_exception_handler)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
@@ -34,7 +38,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["authentication"])
 
 

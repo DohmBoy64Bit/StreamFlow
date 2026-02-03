@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -5,6 +7,14 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.database import Base
 from app.models.db_models import *
+
+
+@pytest.fixture(scope="session", autouse=True)
+def set_test_env():
+    """Set environment variables for testing."""
+    os.environ["TESTING"] = "true"
+    yield
+    os.environ.pop("TESTING", None)
 
 
 @pytest.fixture(scope="session")
