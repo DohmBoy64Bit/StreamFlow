@@ -18,7 +18,7 @@ def create_recovery_codes(db: Session, user_id: uuid.UUID, code_hashes: list[str
 
 def verify_and_invalidate_code(db: Session, user_id: uuid.UUID, plain_code: str) -> bool:
     recovery_codes = (
-        db.query(RecoveryCode).filter(RecoveryCode.user_id == user_id, RecoveryCode.used == False).all()
+        db.query(RecoveryCode).filter(RecoveryCode.user_id == user_id, RecoveryCode.used.is_(False)).all()
     )
 
     for recovery_code in recovery_codes:

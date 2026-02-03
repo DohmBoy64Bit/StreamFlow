@@ -1,7 +1,7 @@
 import secrets
 import string
 
-from passlib.context import CryptContext
+from passlib.context import CryptContext  # type: ignore
 
 code_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
 
@@ -16,8 +16,8 @@ def generate_recovery_codes(count: int = 5, length: int = 12) -> list[str]:
 
 
 def hash_code(code: str) -> str:
-    return code_context.hash(code)
+    return str(code_context.hash(code))
 
 
 def verify_code(plain_code: str, hashed_code: str) -> bool:
-    return code_context.verify(plain_code, hashed_code)
+    return bool(code_context.verify(plain_code, hashed_code))

@@ -34,4 +34,4 @@ class Settings(BaseSettings):
         return [domain.strip() for domain in self.VIDSRC_FALLBACK_DOMAINS.split(",")]
 
 
-settings = Settings()
+settings = Settings()  # type: ignore
