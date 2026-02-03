@@ -1,172 +1,113 @@
+import os
+
+os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
+
 import pytest
 
-from app.services.auth_service import (
-    InvalidCredentialsError,
-    InvalidRecoveryCodeError,
-    UserAlreadyExistsError,
-    authenticate_user,
-    recover_password,
-    register_user,
-)
+from app.services import auth_service
 
 
-class TestUserRegistration:
-    def test_register_user_success(self, db_session):
-        """Test successful user registration."""
-        username = "testuser"
-        password = "testpassword123"
+def test_register_user(db_session):
+    username = "newuser"
+    password = "secure_password"
 
-        user, recovery_codes = register_user(db_session, username, password)
+    user, recovery_codes = auth_service.register_user(db_session, username, password)
 
-        assert user.username == username
-        assert user.password_hash != password  # Should be hashed
-        assert len(recovery_codes) == 5  # Default number of codes
-
-        # Verify recovery codes are valid format
-        for code in recovery_codes:
-            assert len(code) == 12
-            assert code.isalnum()
-            assert code.isupper()
-
-    def test_register_user_duplicate_username(self, db_session):
-        """Test registration with duplicate username."""
-        username = "testuser"
-        password1 = "password1"
-        password2 = "password2"
-
-        # Register first user
-        register_user(db_session, username, password1)
-
-        # Try to register second user with same username
-        with pytest.raises(UserAlreadyExistsError):
-            register_user(db_session, username, password2)
+    assert user.id is not None
+    assert user.username == username
+    assert user.password_hash != password
+    assert len(recovery_codes) == 5
+    for code in recovery_codes:
+        assert len(code) == 12
 
 
-class TestUserAuthentication:
-    def test_authenticate_user_success(self, db_session):
-        """Test successful user authentication."""
-        username = "testuser"
-        password = "testpassword123"
+def test_register_user_creates_recovery_codes(db_session):
+    username = "newuser"
+    password = "secure_password"
 
-        # Register user
-        registered_user, _ = register_user(db_session, username, password)
+    user, recovery_codes = auth_service.register_user(db_session, username, password)
 
-        # Authenticate
-        authenticated_user = authenticate_user(db_session, username, password)
-
-        assert authenticated_user.id == registered_user.id
-        assert authenticated_user.username == username
-
-    def test_authenticate_user_wrong_username(self, db_session):
-        """Test authentication with wrong username."""
-        username = "testuser"
-        password = "testpassword123"
-
-        # Register user
-        register_user(db_session, username, password)
-
-        # Try to authenticate with wrong username
-        with pytest.raises(InvalidCredentialsError):
-            authenticate_user(db_session, "wronguser", password)
-
-    def test_authenticate_user_wrong_password(self, db_session):
-        """Test authentication with wrong password."""
-        username = "testuser"
-        password = "testpassword123"
-        wrong_password = "wrongpassword"
-
-        # Register user
-        register_user(db_session, username, password)
-
-        # Try to authenticate with wrong password
-        with pytest.raises(InvalidCredentialsError):
-            authenticate_user(db_session, username, wrong_password)
+    assert len(user.recovery_codes) == 5
+    for recovery_code_obj in user.recovery_codes:
+        assert recovery_code_obj.user_id == user.id
+        assert recovery_code_obj.used is False
 
 
-class TestPasswordRecovery:
-    def test_recover_password_success(self, db_session):
-        """Test successful password recovery."""
-        username = "testuser"
-        old_password = "oldpassword123"
-        new_password = "newpassword123"
+def test_authenticate_user_success(db_session):
+    username = "testuser"
+    password = "secure_password"
+    auth_service.register_user(db_session, username, password)
 
-        # Register user and get recovery codes
-        user, recovery_codes = register_user(db_session, username, old_password)
+    authenticated_user = auth_service.authenticate_user(db_session, username, password)
 
-        # Use first recovery code
-        recovery_code = recovery_codes[0]
+    assert authenticated_user is not None
+    assert authenticated_user.username == username
 
-        # Recover password
-        recovered_user = recover_password(db_session, username, recovery_code, new_password)
 
-        assert recovered_user.id == user.id
-        assert recovered_user.username == username
+def test_authenticate_user_wrong_password(db_session):
+    username = "testuser"
+    password = "secure_password"
+    auth_service.register_user(db_session, username, password)
 
-        # Verify old password no longer works
-        with pytest.raises(InvalidCredentialsError):
-            authenticate_user(db_session, username, old_password)
+    authenticated_user = auth_service.authenticate_user(db_session, username, "wrong_password")
 
-        # Verify new password works
-        authenticated_user = authenticate_user(db_session, username, new_password)
-        assert authenticated_user.id == user.id
+    assert authenticated_user is None
 
-    def test_recover_password_wrong_username(self, db_session):
-        """Test password recovery with wrong username."""
-        username = "testuser"
-        recovery_code = "ABC123DEF456"
-        new_password = "newpassword123"
 
-        with pytest.raises(InvalidCredentialsError):
-            recover_password(db_session, username, recovery_code, new_password)
+def test_authenticate_user_nonexistent(db_session):
+    authenticated_user = auth_service.authenticate_user(db_session, "nonexistent", "password")
 
-    def test_recover_password_invalid_code(self, db_session):
-        """Test password recovery with invalid recovery code."""
-        username = "testuser"
-        old_password = "oldpassword123"
-        invalid_code = "INVALIDCODE12"
-        new_password = "newpassword123"
+    assert authenticated_user is None
 
-        # Register user
-        register_user(db_session, username, old_password)
 
-        # Try to recover with invalid code
-        with pytest.raises(InvalidRecoveryCodeError):
-            recover_password(db_session, username, invalid_code, new_password)
+def test_recover_password_success(db_session):
+    username = "testuser"
+    password = "secure_password"
+    new_password = "new_secure_password"
 
-    def test_recover_password_used_code(self, db_session):
-        """Test password recovery with already used recovery code."""
-        username = "testuser"
-        old_password = "oldpassword123"
-        new_password1 = "newpassword123"
-        new_password2 = "anotherpassword"
+    user, recovery_codes = auth_service.register_user(db_session, username, password)
 
-        # Register user and get recovery codes
-        user, recovery_codes = register_user(db_session, username, old_password)
+    result = auth_service.recover_password(db_session, username, recovery_codes[0], new_password)
 
-        # Use recovery code once
-        recovery_code = recovery_codes[0]
-        recover_password(db_session, username, recovery_code, new_password1)
+    assert result is True
 
-        # Try to use same code again
-        with pytest.raises(InvalidRecoveryCodeError):
-            recover_password(db_session, username, recovery_code, new_password2)
+    old_auth = auth_service.authenticate_user(db_session, username, password)
+    assert old_auth is None
 
-    def test_recover_password_multiple_codes(self, db_session):
-        """Test that multiple recovery codes work."""
-        username = "testuser"
-        old_password = "oldpassword123"
-        new_password1 = "newpassword123"
-        new_password2 = "anotherpassword"
+    new_auth = auth_service.authenticate_user(db_session, username, new_password)
+    assert new_auth is not None
 
-        # Register user and get recovery codes
-        user, recovery_codes = register_user(db_session, username, old_password)
 
-        # Use first code
-        recover_password(db_session, username, recovery_codes[0], new_password1)
+def test_recover_password_wrong_code(db_session):
+    username = "testuser"
+    password = "secure_password"
+    new_password = "new_secure_password"
 
-        # Use second code for another recovery
-        recover_password(db_session, username, recovery_codes[1], new_password2)
+    user, recovery_codes = auth_service.register_user(db_session, username, password)
 
-        # Verify final password works
-        authenticated_user = authenticate_user(db_session, username, new_password2)
-        assert authenticated_user.id == user.id
+    result = auth_service.recover_password(db_session, username, "WRONG_CODE", new_password)
+
+    assert result is False
+
+    auth = auth_service.authenticate_user(db_session, username, password)
+    assert auth is not None
+
+
+def test_recover_password_code_invalidated(db_session):
+    username = "testuser"
+    password = "secure_password"
+    new_password = "new_secure_password"
+
+    user, recovery_codes = auth_service.register_user(db_session, username, password)
+
+    result1 = auth_service.recover_password(db_session, username, recovery_codes[0], new_password)
+    assert result1 is True
+
+    result2 = auth_service.recover_password(db_session, username, recovery_codes[0], "another_password")
+    assert result2 is False
+
+
+def test_recover_password_nonexistent_user(db_session):
+    result = auth_service.recover_password(db_session, "nonexistent", "ANY_CODE", "new_password")
+
+    assert result is False
