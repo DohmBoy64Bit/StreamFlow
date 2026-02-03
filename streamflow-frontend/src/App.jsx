@@ -1,16 +1,30 @@
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Recover from './pages/Recover';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-netflix-black text-white">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-netflix-red">StreamFlow</h1>
-          <p className="mt-4 text-gray-300">Welcome to StreamFlow - Your streaming platform</p>
-        </div>
-      </div>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/recover" element={<Recover />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

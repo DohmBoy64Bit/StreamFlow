@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 export const ROUTES = {
   HOME: '/',
@@ -16,38 +16,38 @@ export const ROUTES = {
 
 export const API_ENDPOINTS = {
   AUTH: {
-    REGISTER: '/auth/register',
-    LOGIN: '/auth/login',
-    RECOVER: '/auth/recover',
-    ME: '/auth/me',
+    REGISTER: '/api/v1/auth/register',
+    LOGIN: '/api/v1/auth/login',
+    RECOVER: '/api/v1/auth/recover',
+    ME: '/api/v1/auth/me',
   },
   MOVIES: {
-    TRENDING: '/movies/trending',
-    POPULAR: '/movies/popular',
-    TOP_RATED: '/movies/top-rated',
-    DETAILS: (id) => `/movies/${id}`,
-    SEARCH: '/movies/search',
+    TRENDING: '/api/v1/movies/trending',
+    POPULAR: '/api/v1/movies/popular',
+    TOP_RATED: '/api/v1/movies/top-rated',
+    DETAILS: (id) => `/api/v1/movies/${id}`,
+    SEARCH: '/api/v1/movies/search',
   },
   TV: {
-    TRENDING: '/tv/trending',
-    POPULAR: '/tv/popular',
-    DETAILS: (id) => `/tv/${id}`,
-    SEASON: (id, season) => `/tv/${id}/season/${season}`,
+    TRENDING: '/api/v1/tv/trending',
+    POPULAR: '/api/v1/tv/popular',
+    DETAILS: (id) => `/api/v1/tv/${id}`,
+    SEASON: (id, season) => `/api/v1/tv/${id}/season/${season}`,
   },
   LISTS: {
-    CREATE: '/lists',
-    GET_ALL: '/lists',
-    DETAILS: (id) => `/lists/${id}`,
-    DELETE: (id) => `/lists/${id}`,
-    ADD_ITEM: (id) => `/lists/${id}/items`,
-    REMOVE_ITEM: (id, itemId) => `/lists/${id}/items/${itemId}`,
+    CREATE: '/api/v1/lists',
+    GET_ALL: '/api/v1/lists',
+    DETAILS: (id) => `/api/v1/lists/${id}`,
+    DELETE: (id) => `/api/v1/lists/${id}`,
+    ADD_ITEM: (id) => `/api/v1/lists/${id}/items`,
+    REMOVE_ITEM: (id, itemId) => `/api/v1/lists/${id}/items/${itemId}`,
   },
   WATCH: {
-    HISTORY: '/watch/history',
-    RESUME: (id) => `/watch/resume/${id}`,
+    HISTORY: '/api/v1/watch/history',
+    RESUME: (id) => `/api/v1/watch/resume/${id}`,
   },
   STATS: {
-    GLOBAL: '/stats/global',
-    USER: '/stats/user',
+    GLOBAL: '/api/v1/stats/global',
+    USER: '/api/v1/stats/user',
   },
 };
