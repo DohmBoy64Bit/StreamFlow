@@ -6,6 +6,8 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.api.routes.auth import router as auth_router
+from app.api.routes.movies import router as movies_router
+from app.api.routes.tv import router as tv_router
 from app.config import settings
 from app.core.database import engine
 from app.core.middleware import global_exception_handler, limiter
@@ -39,6 +41,8 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["authentication"])
+app.include_router(movies_router, prefix="/api/v1/movies", tags=["movies"])
+app.include_router(tv_router, prefix="/api/v1/tv", tags=["tv"])
 
 
 @app.get("/health")

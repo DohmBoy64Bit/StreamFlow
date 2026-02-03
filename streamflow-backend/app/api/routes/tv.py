@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query
 from app.schemas.tv import SeasonDetails, TVDetails, TVListResponse
 from app.services import tv_service
 
-router = APIRouter(prefix="/tv", tags=["tv"])
+router = APIRouter()
 
 
 @router.get("/trending", response_model=TVListResponse)

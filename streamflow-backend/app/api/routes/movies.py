@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query
 from app.schemas.movie import MovieDetails, MovieListResponse
 from app.services import movie_service
 
-router = APIRouter(prefix="/movies", tags=["movies"])
+router = APIRouter()
 
 
 @router.get("/trending", response_model=MovieListResponse)

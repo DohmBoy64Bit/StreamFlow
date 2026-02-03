@@ -234,7 +234,7 @@ Create TMDB API client with caching support.
 
 ---
 
-### [ ] Step: Movie & TV Show API Endpoints
+### [x] Step: Movie & TV Show API Endpoints
 <!-- chat-id: 3029c310-af1d-42f4-8960-b27ff86958ca -->
 
 Create endpoints for browsing and searching content via TMDB.
