@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
     TOP_RATED: '/api/v1/movies/top-rated',
     DETAILS: (id) => `/api/v1/movies/${id}`,
     SEARCH: '/api/v1/movies/search',
+    GENRES: '/api/v1/movies/genres',
   },
   TV: {
     TRENDING: '/api/v1/tv/trending',

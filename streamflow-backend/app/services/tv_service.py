@@ -20,6 +20,10 @@ async def get_season_details(tmdb_id: int, season_number: int) -> SeasonDetails:
     return await tmdb_client.get_season_details(tmdb_id=tmdb_id, season_number=season_number)
 
 
+async def get_genres() -> dict[str, Any]:
+    return await tmdb_client.get_genres(media_type="tv")
+
+
 async def search_tv(
     query: str | None = None,
     page: int = 1,
@@ -41,9 +45,10 @@ async def search_tv(
         data = await tmdb_client.discover_tv(filters=filters, page=page)
     else:
         # 2. Focused Keyword Search (Query present, filters may be present)
-        # Note: TMDB /search/tv ignores filters, so we must apply them locally if present
+        # Note: TMDB /search/tv ignores genres/rating, so we must apply them locally if present
+        # But it DOES support first_air_date_year, so we pass it for better precision
         if query:
-            data = await tmdb_client.search_tv(query=query, page=page)
+            data = await tmdb_client.search_tv(query=query, page=page, year=year)
         else:
             # Fallback to popular if no query and no filters
             return await tmdb_client.get_popular_tv(page=page) # type: ignore[return-value]

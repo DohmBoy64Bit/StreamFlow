@@ -2,10 +2,15 @@ from typing import Any
 
 from fastapi import APIRouter, Query
 
-from app.schemas.movie import MovieDetails, MovieListResponse
+from app.schemas.movie import GenreListResponse, MovieDetails, MovieListResponse
 from app.services import movie_service
 
 router = APIRouter()
+
+
+@router.get("/genres", response_model=GenreListResponse)
+async def get_movie_genres() -> GenreListResponse:
+    return await movie_service.get_genres()  # type: ignore[return-value]
 
 
 @router.get("/trending", response_model=MovieListResponse)

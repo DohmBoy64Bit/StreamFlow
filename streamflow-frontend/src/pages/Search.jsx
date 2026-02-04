@@ -6,7 +6,7 @@ import MobileNav from '../components/MobileNav';
 import MovieCard from '../components/MovieCard';
 import Spinner from '../components/Spinner';
 import ErrorMessage from '../components/ErrorMessage';
-import { searchMovies } from '../services/movies';
+import { searchMovies, getGenres } from '../services/movies';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Search = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [availableGenres, setAvailableGenres] = useState([]);
   const [filters, setFilters] = useState({
     genre: '',
     year: '',
@@ -24,11 +25,30 @@ const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [deepSearch, setDeepSearch] = useState(false);
 
+  // Fetch Genres on Mount
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const data = await getGenres();
+        setAvailableGenres(data.genres || []);
+      } catch (err) {
+        console.error('Failed to fetch genres:', err);
+      }
+    };
+    fetchGenres();
+  }, []);
+
   const handleSearch = useCallback(async () => {
-    if (!query.trim()) return;
+    // Note: Allow empty query if filters are present (Discovery mode)
+    const isValidYear = !filters.year || (filters.year.length === 4 && !isNaN(filters.year));
+
+    // Don't search if year is incomplete (e.g., "1", "19", "198")
+    if (!isValidYear) return;
+    if (!query.trim() && !filters.genre && !filters.year && !filters.rating) return;
 
     setLoading(true);
     setError(null);
+    setResults([]); // Clear results while loading to prevent stale data
 
     try {
       const data = await searchMovies(query, filters, page, deepSearch);
@@ -40,13 +60,14 @@ const Search = () => {
     } finally {
       setLoading(false);
     }
-  }, [query, filters, page]);
+  }, [query, filters, page, deepSearch]);
 
   useEffect(() => {
-    if (query.trim()) {
+    const isValidYear = !filters.year || (filters.year.length === 4 && !isNaN(filters.year));
+    if (query.trim() || filters.genre || (filters.year && isValidYear) || filters.rating) {
       handleSearch();
     }
-  }, [page, query, handleSearch]);
+  }, [page, query, handleSearch, filters.year]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -107,7 +128,7 @@ const Search = () => {
               </div>
 
               {/* Deep Search Toggle */}
-              <div className="flex items-center gap-3 px-3 py-1.5 glass-panel border-white/5 rounded-lg shrink-0">
+              <div className="flex items-center gap-3 px-3 py-1.5 glass-panel border-white/5 rounded-lg shrink-0 w-full md:w-auto justify-between md:justify-start">
                 <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest pl-1">Deep Scan</span>
                 <button
                   type="button"
@@ -155,16 +176,21 @@ const Search = () => {
               />
             </div>
 
-            {/* Genre Filter */}
+            {/* Genre Filter - Now a Dropdown */}
             <div className="card p-3 border-white/5 bg-white/[0.01]">
-              <label className="block text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] mb-1.5 pl-1">Genre ID</label>
-              <input
-                type="text"
+              <label className="block text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] mb-1.5 pl-1">Genre</label>
+              <select
                 value={filters.genre}
                 onChange={(e) => setFilters({ ...filters, genre: e.target.value })}
-                placeholder="e.g., 28 for Action"
-                className="w-full px-3 py-2 bg-streamflow-navy-light/30 border border-white/10 text-white rounded-lg focus:outline-none focus:border-streamflow-cyan/50 text-[11px] font-bold placeholder:text-gray-700"
-              />
+                className="w-full px-3 py-2 bg-streamflow-navy-light/30 border border-white/10 text-white rounded-lg focus:outline-none focus:border-streamflow-cyan/50 text-[11px] font-bold appearance-none cursor-pointer"
+              >
+                <option value="" className="bg-streamflow-navy font-bold">All Genres</option>
+                {availableGenres.map((genre) => (
+                  <option key={genre.id} value={genre.id} className="bg-streamflow-navy font-bold">
+                    {genre.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Rating Filter */}
@@ -253,7 +279,7 @@ const Search = () => {
         )}
 
         {/* Empty State - Compact */}
-        {!loading && query && results.length === 0 && (
+        {!loading && (query || filters.genre || filters.year || filters.rating) && results.length === 0 && (
           <div className="text-center py-16 glass-panel border-white/5 rounded-3xl animate-slideUp">
             <div className="w-16 h-16 bg-white/[0.02] rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
               <svg className="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,7 +287,7 @@ const Search = () => {
               </svg>
             </div>
             <h3 className="text-lg font-black text-white mb-1 uppercase tracking-tight">Access Denied</h3>
-            <p className="text-gray-600 text-[10px] font-black uppercase tracking-widest">No matching records found for "{query}"</p>
+            <p className="text-gray-600 text-[10px] font-black uppercase tracking-widest">No matching records found for your query</p>
           </div>
         )}
       </div>

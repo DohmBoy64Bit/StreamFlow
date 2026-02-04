@@ -20,6 +20,10 @@ async def get_movie_details(tmdb_id: int) -> MovieDetails:
     return await tmdb_client.get_movie_details(tmdb_id=tmdb_id)
 
 
+async def get_genres() -> dict[str, Any]:
+    return await tmdb_client.get_genres(media_type="movie")
+
+
 async def search_movies(
     query: str | None = None,
     page: int = 1,
@@ -45,9 +49,10 @@ async def search_movies(
         data = await tmdb_client.discover_movies(filters=filters, page=page)
     else:
         # 3. Focused Keyword Search (Query present, filters may be present)
-        # Note: TMDB /search/movie ignores filters, so we must apply them locally if present
+        # Note: TMDB /search/movie ignores genres/rating, so we must apply them locally if present
+        # But it DOES support year, so we pass it for better precision
         if query:
-            data = await tmdb_client.search_movies(query=query, page=page)
+            data = await tmdb_client.search_movies(query=query, page=page, year=year)
         else:
             # Fallback to popular if no query and no filters
             return await tmdb_client.get_popular_movies(page=page) # type: ignore[return-value]
@@ -67,7 +72,7 @@ async def search_movies(
 
             # B. Local Filter Enforcement (Only needed if query was present since /search ignore filters)
             # discovery mode already filters server-side
-            if query and filters and not (deep_search and media_type):
+            if query and filters:
                 if genre and genre not in item.get("genre_ids", []):
                     continue
                 if year:

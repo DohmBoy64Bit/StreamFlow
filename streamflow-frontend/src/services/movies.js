@@ -1,6 +1,11 @@
 import api from './api';
 import { API_ENDPOINTS } from '../utils/constants';
 
+export const getGenres = async () => {
+  const response = await api.get(API_ENDPOINTS.MOVIES.GENRES);
+  return response.data;
+};
+
 export const getTrendingMovies = async (page = 1) => {
   const response = await api.get(API_ENDPOINTS.MOVIES.TRENDING, {
     params: { page },
