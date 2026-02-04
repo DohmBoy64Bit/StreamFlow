@@ -9,27 +9,47 @@ const MovieCard = ({ item, onClick }) => {
   return (
     <div
       onClick={() => onClick(item)}
-      className="flex-shrink-0 w-40 md:w-48 cursor-pointer transform transition-all duration-300 hover:scale-105 active:scale-95 group"
+      className="flex-shrink-0 w-36 md:w-44 cursor-pointer transform transition-all duration-300 hover:scale-[1.02] active:scale-95 group relative"
     >
-      <div className="relative">
+      <div className="relative overflow-hidden rounded-sm border border-white/5 transition-all duration-300 group-hover:border-streamflow-cyan/40 group-hover:shadow-[0_0_20px_rgba(0,255,255,0.15)]">
         {posterPath ? (
           <img
             src={`${imageBaseUrl}${posterPath}`}
             alt={title}
             loading="lazy"
             draggable={false}
-            className="w-full h-60 md:h-72 object-cover rounded-lg shadow-lg border border-white/5 transition-all duration-300 group-hover:shadow-cyan-glow group-hover:border-streamflow-cyan/30"
+            className="w-full h-52 md:h-64 object-cover transition-transform duration-700 group-hover:scale-110"
           />
         ) : (
-          <div className="w-full h-60 md:h-72 bg-streamflow-navy-light/50 border border-white/5 rounded-lg flex items-center justify-center">
-            <span className="text-gray-500 text-xs md:text-sm">No Image</span>
+          <div className="w-full h-52 md:h-64 bg-streamflow-navy-light/50 flex items-center justify-center">
+            <span className="text-gray-500 text-[10px] uppercase font-black tracking-widest">No Asset</span>
           </div>
         )}
-        <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded-md border border-white/10 shadow-lg">
-          <span className="text-streamflow-cyan font-bold text-xs md:text-sm">⭐ {rating}</span>
+
+        {/* Diagnostic Score Tag */}
+        <div className="absolute top-2 right-2 flex flex-col items-end">
+          <div className="bg-black/90 backdrop-blur-md px-1.5 py-0 rounded-[1px] border border-white/10 flex items-center gap-1.5 shadow-xl">
+            <span className="text-[7px] font-bold text-gray-500 uppercase tracking-tighter">Score</span>
+            <span className="text-streamflow-cyan font-bold text-[10px] tracking-tight">{rating}</span>
+          </div>
+        </div>
+
+        {/* Technical Data Overlay on Hover */}
+        <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-1 rounded-full bg-streamflow-cyan animate-pulse" />
+              <span className="text-[8px] font-black text-streamflow-cyan uppercase tracking-widest">Data Node active</span>
+            </div>
+            <h3 className="text-white font-black text-[11px] uppercase tracking-tight line-clamp-2 leading-tight">
+              {title}
+            </h3>
+          </div>
         </div>
       </div>
-      <h3 className="mt-2 text-white font-medium text-xs md:text-sm line-clamp-2">{title}</h3>
+
+      {/* Visual Base Accent */}
+      <div className="h-0.5 w-0 group-hover:w-full bg-streamflow-cyan transition-all duration-500 mt-2 opacity-30 shadow-[0_0_8px_rgba(0,255,255,0.4)]" />
     </div>
   );
 };

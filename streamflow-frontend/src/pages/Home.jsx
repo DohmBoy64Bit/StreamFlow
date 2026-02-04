@@ -125,26 +125,73 @@ const Home = () => {
     <div className="min-h-screen bg-streamflow-navy pb-20 md:pb-0">
       <Navbar />
 
-      <div className="relative h-[50vh] md:h-[65vh] flex items-center justify-center overflow-hidden">
+      <div className="relative pt-12 md:pt-20 px-4 mb-2 md:mb-6">
         {/* Background Ambient Glows */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-streamflow-blue/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-streamflow-cyan/10 blur-[150px] rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-streamflow-blue/10 blur-[120px] rounded-full opacity-50" />
 
-        <div className="text-center px-4 relative z-10 pt-12 md:pt-16">
-          <img src="/assets/logo.png" alt="StreamFlow" className="h-32 md:h-40 lg:h-48 mx-auto mb-4 md:mb-8 animate-in zoom-in duration-700" style={{ filter: 'drop-shadow(0 0 20px rgba(0, 255, 255, 0.4))' }} />
-          <p className="text-lg md:text-xl lg:text-2xl text-cyan-100/70 mb-6 md:mb-8 font-light tracking-wide">
-            Unlimited movies, TV shows, and more
-          </p>
-          <button
-            onClick={() => navigate('/search')}
-            className="btn-primary px-8 py-3 md:px-10 md:py-4 text-base md:text-lg"
-          >
-            Browse Content
-          </button>
+        <div className="max-w-5xl mx-auto">
+          {/* Diagnostic Hero Container */}
+          <div className="relative group">
+            {/* Technical Border Accents */}
+            <div className="absolute -top-px -left-px w-8 h-8 border-t border-l border-streamflow-cyan/30 rounded-tl-xl" />
+            <div className="absolute -top-px -right-px w-8 h-8 border-t border-r border-streamflow-cyan/30 rounded-tr-xl" />
+            <div className="absolute -bottom-px -left-px w-8 h-8 border-b border-l border-streamflow-cyan/30 rounded-bl-xl" />
+            <div className="absolute -bottom-px -right-px w-8 h-8 border-b border-r border-streamflow-cyan/30 rounded-br-xl" />
+
+            <div className="card p-6 md:p-10 border-white/5 bg-white/[0.01] overflow-hidden flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
+              {/* Scanline Effect */}
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.02),rgba(0,255,0,0.01),rgba(0,0,255,0.02))] bg-[length:100%_4px,3px_100%] opacity-20" />
+
+              {/* Compact Logo & Meta */}
+              <div className="flex-shrink-0 relative">
+                <div className="absolute inset-0 bg-streamflow-cyan/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <img
+                  src="/assets/mascot.png"
+                  alt="StreamFlow Mascot"
+                  className="h-16 md:h-20 relative z-10 transition-transform duration-500 group-hover:scale-110"
+                  style={{ filter: 'drop-shadow(0 0 15px rgba(0, 255, 255, 0.3))' }}
+                />
+              </div>
+
+              {/* Technical Readout */}
+              <div className="flex-grow text-center md:text-left space-y-4">
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  <div className="px-2 py-0.5 bg-streamflow-cyan/10 border border-streamflow-cyan/30 rounded-[2px]">
+                    <span className="text-[9px] font-black text-streamflow-cyan uppercase tracking-widest leading-none">System Lock: Active</span>
+                  </div>
+                  <div className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-[2px]">
+                    <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none">Hub-ID: SF-01</span>
+                  </div>
+                  <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.3em] ml-auto hidden lg:block">Data Stream v2.4</span>
+                </div>
+
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight uppercase leading-none">
+                  Data Acquisition <span className="text-streamflow-cyan">Hub</span>
+                </h1>
+
+                <p className="text-xs md:text-sm text-gray-500 font-medium max-w-md leading-relaxed">
+                  Unified interface for cross-platform media synchronization and diagnostic tracking. System operating within optimal parameters.
+                </p>
+
+                <div className="pt-2 flex items-center justify-center md:justify-start gap-4">
+                  <button
+                    onClick={() => navigate('/search')}
+                    className="px-6 py-2 bg-streamflow-cyan text-streamflow-navy text-[11px] font-black uppercase tracking-widest rounded-sm hover:bg-white transition-colors shadow-[0_0_15px_rgba(0,255,255,0.3)] hover:shadow-cyan-glow-intense"
+                  >
+                    Initiate Search
+                  </button>
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-black text-gray-700 uppercase tracking-widest">Uptime</span>
+                    <span className="text-[10px] font-black text-streamflow-cyan leading-none">99.9% Nominal</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="container mx-auto pb-8 pt-0 -mt-8 md:-mt-12 relative z-10">
+      <div className="container mx-auto pb-8 pt-8 md:pt-12 relative z-10">
         {isAuthenticated && contentData.continueWatching.length > 0 && (
           <Carousel
             title="Continue Watching"
