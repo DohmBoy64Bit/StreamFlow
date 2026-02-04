@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to={ROUTES.HOME} className="flex items-center">
-            <img src="/assets/logo.jpg" alt="StreamFlow" className="h-12 md:h-14" />
+            <img src="/assets/logo.png" alt="StreamFlow" className="h-12 md:h-14" />
           </Link>
 
           <button
