@@ -22,7 +22,7 @@ const Profile = () => {
 
       try {
         const data = await getWatchHistory(10, 0);
-        setWatchHistory(data || []);
+        setWatchHistory(data.items || []);
       } catch (err) {
         setError('Failed to load watch history');
         console.error('Watch history error:', err);
