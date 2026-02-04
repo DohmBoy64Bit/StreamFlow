@@ -29,6 +29,21 @@
   .glass-panel {
     @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
+
+  /* Premium Tooltips */
+  .tooltip-container {
+    @apply relative;
+  }
+
+  .tooltip-content {
+    @apply invisible opacity-0 absolute bottom-full left-0 mb-1 px-3 py-1.5 bg-streamflow-navy border border-white/10 rounded-lg text-[10px] font-black uppercase tracking-widest text-cyan-100/60 whitespace-nowrap shadow-2xl backdrop-blur-xl transition-all duration-300 z-50 pointer-events-none;
+    transform: translateY(4px);
+  }
+
+  .tooltip-container:hover .tooltip-content {
+    @apply visible opacity-100;
+    transform: translateY(-4px);
+  }
 }
 
 @layer utilities {

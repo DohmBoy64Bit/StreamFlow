@@ -59,7 +59,10 @@ const Navbar = () => {
                 </Link>
                 <span className="text-gray-400">|</span>
                 <span className="text-gray-300">{user?.username}</span>
-                <button onClick={handleLogout} className="btn-secondary">
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 border border-white/10 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-streamflow-cyan hover:border-streamflow-cyan/30 hover:bg-streamflow-cyan/5 transition-all duration-500"
+                >
                   Logout
                 </button>
               </>
@@ -107,7 +110,10 @@ const Navbar = () => {
                   </Link>
                   <div className="border-t border-white/10 pt-4">
                     <span className="text-gray-300 block mb-2">{user?.username}</span>
-                    <button onClick={handleLogout} className="btn-secondary w-full">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full py-3 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-streamflow-cyan hover:border-streamflow-cyan/30 hover:bg-streamflow-cyan/5 transition-all duration-500"
+                    >
                       Logout
                     </button>
                   </div>

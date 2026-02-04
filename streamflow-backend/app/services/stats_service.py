@@ -5,7 +5,14 @@ from sqlalchemy.orm import Session
 
 from app.integrations.tmdb_client import tmdb_client
 from app.repositories import stats_repo
-from app.schemas.stats import ContentStat, GenreStat, GlobalStats, UserStats, WatchTimelineItem
+from app.schemas.stats import (
+    ContentStat,
+    GenreStat,
+    GlobalStats,
+    MediaPartition,
+    UserStats,
+    WatchTimelineItem,
+)
 
 
 async def get_global_stats(db: Session) -> GlobalStats:
@@ -105,6 +112,11 @@ async def get_user_stats(db: Session, user_id: uuid.UUID) -> UserStats:
         for (genre_id, genre_name), count in genre_counter.most_common(5)
     ]
 
+    media_partition = MediaPartition(
+        movies=len([entry for entry in timeline_raw if entry.media_type == "movie"]),
+        tv_shows=len([entry for entry in timeline_raw if entry.media_type == "tv"]),
+    )
+
     most_rewatched = []
     for item in most_rewatched_raw:
         try:
@@ -172,4 +184,5 @@ async def get_user_stats(db: Session, user_id: uuid.UUID) -> UserStats:
         top_genres=top_genres,
         most_rewatched=most_rewatched,
         watch_timeline=timeline,
+        media_partition=media_partition,
     )

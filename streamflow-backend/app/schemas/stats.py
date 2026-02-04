@@ -34,8 +34,14 @@ class WatchTimelineItem(BaseModel):
     watched_at: datetime
 
 
+class MediaPartition(BaseModel):
+    movies: int
+    tv_shows: int
+
+
 class UserStats(BaseModel):
     total_watch_time_seconds: int
     top_genres: list[GenreStat]
     most_rewatched: list[ContentStat]
     watch_timeline: list[WatchTimelineItem]
+    media_partition: MediaPartition

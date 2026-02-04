@@ -10,6 +10,7 @@ export default {
         streamflow: {
           cyan: '#00FFFF',
           blue: '#0047AB',
+          amber: '#FFBF00',
           navy: '#0a0b1e',
           'navy-light': '#161b33',
         },
