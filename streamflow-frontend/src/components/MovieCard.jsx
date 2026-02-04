@@ -17,6 +17,7 @@ const MovieCard = ({ item, onClick }) => {
             src={`${imageBaseUrl}${posterPath}`}
             alt={title}
             loading="lazy"
+            draggable={false}
             className="w-full h-60 md:h-72 object-cover rounded-lg shadow-lg"
           />
         ) : (
