@@ -19,7 +19,6 @@ const Search = () => {
   const [filters, setFilters] = useState({
     genre: '',
     year: '',
-    rating: '',
   });
   const [showFilters, setShowFilters] = useState(false);
 
@@ -99,7 +98,7 @@ const Search = () => {
             {showFilters ? '▼' : '▶'} Filters
           </button>
 
-          <div className={`mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 ${showFilters ? 'block' : 'hidden md:grid'}`}>
+          <div className={`mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 ${showFilters ? 'block' : 'hidden md:grid'}`}>
             <input
               type="number"
               value={filters.year}
@@ -111,17 +110,7 @@ const Search = () => {
               type="text"
               value={filters.genre}
               onChange={(e) => setFilters({ ...filters, genre: e.target.value })}
-              placeholder="Genre (e.g., Action)"
-              className="px-4 py-2 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
-            />
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="10"
-              value={filters.rating}
-              onChange={(e) => setFilters({ ...filters, rating: e.target.value })}
-              placeholder="Min Rating (0-10)"
+              placeholder="Genre ID (e.g., 28 for Action)"
               className="px-4 py-2 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
             />
           </div>

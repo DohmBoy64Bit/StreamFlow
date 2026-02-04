@@ -1,4 +1,5 @@
 import api from './api';
+import { API_ENDPOINTS } from '../utils/constants';
 
 export const saveWatchPosition = async (tmdbId, mediaType, season, episode, position) => {
   const payload = {
@@ -12,7 +13,7 @@ export const saveWatchPosition = async (tmdbId, mediaType, season, episode, posi
     payload.episode_number = episode;
   }
 
-  const response = await api.post('/watch/history', payload);
+  const response = await api.post(API_ENDPOINTS.WATCH.HISTORY, payload);
   return response.data;
 };
 
@@ -26,11 +27,11 @@ export const getResumePosition = async (tmdbId, mediaType, season, episode) => {
     params.append('episode', episode);
   }
 
-  const response = await api.get(`/watch/resume/${tmdbId}?${params.toString()}`);
+  const response = await api.get(`${API_ENDPOINTS.WATCH.RESUME(tmdbId)}?${params.toString()}`);
   return response.data;
 };
 
 export const getWatchHistory = async (limit = 20, offset = 0) => {
-  const response = await api.get(`/watch/history?limit=${limit}&offset=${offset}`);
+  const response = await api.get(`${API_ENDPOINTS.WATCH.HISTORY}?limit=${limit}&offset=${offset}`);
   return response.data;
 };
