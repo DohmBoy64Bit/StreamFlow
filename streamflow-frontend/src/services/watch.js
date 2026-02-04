@@ -5,7 +5,7 @@ export const saveWatchPosition = async (tmdbId, mediaType, season, episode, posi
   const payload = {
     tmdb_id: tmdbId,
     media_type: mediaType,
-    last_position: position,
+    position: position,
   };
 
   if (mediaType === 'tv' && season !== undefined && episode !== undefined) {

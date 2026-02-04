@@ -25,11 +25,14 @@ async def search_movies(
     page: int = 1,
     genre: int | None = None,
     year: int | None = None,
+    rating: float | None = None,
 ) -> dict[str, Any]:
     filters = {}
     if genre:
         filters["with_genres"] = genre
     if year:
         filters["year"] = year
+    if rating:
+        filters["vote_average.gte"] = rating
 
     return await tmdb_client.search_multi(query=query, page=page, filters=filters)

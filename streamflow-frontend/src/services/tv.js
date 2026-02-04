@@ -24,3 +24,17 @@ export const getSeasonDetails = async (tmdbId, seasonNumber) => {
   const response = await api.get(API_ENDPOINTS.TV.SEASON(tmdbId, seasonNumber));
   return response.data;
 };
+
+export const searchTV = async (query, filters = {}, page = 1) => {
+  const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+    if (value !== '' && value !== null && value !== undefined) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+  
+  const response = await api.get('/api/v1/tv/search', {
+    params: { query, page, ...cleanFilters },
+  });
+  return response.data;
+};

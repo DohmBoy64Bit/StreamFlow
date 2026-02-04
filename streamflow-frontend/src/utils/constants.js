@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
   AUTH: {
     REGISTER: '/api/v1/auth/register',
     LOGIN: '/api/v1/auth/login',
-    RECOVER: '/api/v1/auth/recover',
+    RECOVER: '/api/v1/auth/recover-password',
     ME: '/api/v1/auth/me',
   },
   MOVIES: {

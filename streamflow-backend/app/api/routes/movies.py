@@ -35,8 +35,9 @@ async def search_movies(
     page: int = Query(1, ge=1, le=1000, description="Page number"),
     genre: int | None = Query(None, description="Genre ID filter"),
     year: int | None = Query(None, ge=1900, le=2100, description="Release year filter"),
+    rating: float | None = Query(None, ge=0, le=10, description="Minimum rating filter"),
 ) -> dict[str, Any]:
-    return await movie_service.search_movies(query=query, page=page, genre=genre, year=year)
+    return await movie_service.search_movies(query=query, page=page, genre=genre, year=year, rating=rating)
 
 
 @router.get("/{tmdb_id}", response_model=MovieDetails)
