@@ -21,11 +21,12 @@ async def get_movie_details(tmdb_id: int) -> MovieDetails:
 
 
 async def search_movies(
-    query: str,
+    query: str | None = None,
     page: int = 1,
     genre: int | None = None,
     year: int | None = None,
     rating: float | None = None,
+    deep_search: bool = False,
 ) -> dict[str, Any]:
     filters = {}
     if genre:
@@ -35,30 +36,47 @@ async def search_movies(
     if rating:
         filters["vote_average.gte"] = rating
 
-    data = await tmdb_client.search_multi(query=query, page=page, filters=filters)
-    
-    # Filter results for quality and watchability
+    # Tiered Routing Logic
+    if deep_search and query:
+        # 1. Deep Search Mode (Broad multi-search)
+        data = await tmdb_client.search_multi(query=query, page=page, filters=filters)
+    elif not query and filters:
+        # 2. Browsing/Discovery Mode (No query, just filters)
+        data = await tmdb_client.discover_movies(filters=filters, page=page)
+    else:
+        # 3. Focused Keyword Search (Query present, filters may be present)
+        # Note: TMDB /search/movie ignores filters, so we must apply them locally if present
+        if query:
+            data = await tmdb_client.search_movies(query=query, page=page)
+        else:
+            # Fallback to popular if no query and no filters
+            return await tmdb_client.get_popular_movies(page=page) # type: ignore[return-value]
+
+    # Quality and Filter Control
     if "results" in data:
         filtered_results = []
         for item in data["results"]:
             media_type = item.get("media_type")
             
-            # 1. Must be a movie or TV show
-            if media_type not in ["movie", "tv"]:
+            # A. High-Quality Checks
+            # For Deep Search, we must ensure it's a movie or TV show
+            if deep_search and media_type and media_type not in ["movie", "tv"]:
                 continue
-                
-            # 2. Must have a poster (high correlation with metadata quality)
-            if not item.get("poster_path"):
+            if not item.get("poster_path") or not (item.get("release_date") or item.get("first_air_date")):
                 continue
-                
-            # 3. Must have a release/air date (prevents unreleased/placeholder entries)
-            if media_type == "movie":
-                if not item.get("release_date"):
+
+            # B. Local Filter Enforcement (Only needed if query was present since /search ignore filters)
+            # discovery mode already filters server-side
+            if query and filters and not (deep_search and media_type):
+                if genre and genre not in item.get("genre_ids", []):
                     continue
-            elif media_type == "tv":
-                if not item.get("first_air_date"):
+                if year:
+                    release_date = item.get("release_date") or item.get("first_air_date") or ""
+                    if release_date[:4] != str(year):
+                        continue
+                if rating and item.get("vote_average", 0) < rating:
                     continue
-            
+
             filtered_results.append(item)
             
         data["results"] = filtered_results

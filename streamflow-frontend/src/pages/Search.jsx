@@ -22,6 +22,7 @@ const Search = () => {
     rating: '',
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [deepSearch, setDeepSearch] = useState(false);
 
   const handleSearch = useCallback(async () => {
     if (!query.trim()) return;
@@ -30,7 +31,7 @@ const Search = () => {
     setError(null);
 
     try {
-      const data = await searchMovies(query, filters, page);
+      const data = await searchMovies(query, filters, page, deepSearch);
       setResults(data.results || []);
       setTotalPages(data.total_pages || 0);
     } catch (err) {
@@ -91,8 +92,8 @@ const Search = () => {
         <form onSubmit={handleSubmit} className="mb-8">
           {/* Main Search Bar - Ultra Compact */}
           <div className="card p-3 md:p-4 border-white/5 bg-white/[0.01] mb-6">
-            <div className="flex flex-col md:flex-row gap-2.5">
-              <div className="flex-1 relative">
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <div className="flex-1 relative w-full">
                 <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -104,7 +105,22 @@ const Search = () => {
                   className="w-full pl-11 pr-4 py-2.5 bg-streamflow-navy-light/50 backdrop-blur-sm border border-white/10 text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-streamflow-cyan/30 focus:border-streamflow-cyan/30 transition-all duration-300 text-xs font-medium placeholder:text-gray-600"
                 />
               </div>
-              <button type="submit" className="btn-primary py-2.5 px-6 md:px-8 text-xs font-black shadow-cyan-glow/10 flex items-center justify-center gap-2 transition-transform hover:scale-105">
+
+              {/* Deep Search Toggle */}
+              <div className="flex items-center gap-3 px-3 py-1.5 glass-panel border-white/5 rounded-lg shrink-0">
+                <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest pl-1">Deep Scan</span>
+                <button
+                  type="button"
+                  onClick={() => setDeepSearch(!deepSearch)}
+                  className={`relative inline-flex h-4 w-8 items-center rounded-full transition-colors focus:outline-none ${deepSearch ? 'bg-streamflow-cyan/50' : 'bg-white/10'}`}
+                >
+                  <span
+                    className={`${deepSearch ? 'translate-x-4' : 'translate-x-1'} inline-block h-2 w-2 transform rounded-full bg-white transition-transform`}
+                  />
+                </button>
+              </div>
+
+              <button type="submit" className="btn-primary py-2.5 px-6 md:px-8 text-xs font-black shadow-cyan-glow/10 flex items-center justify-center gap-2 transition-transform hover:scale-105 w-full md:w-auto">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -187,11 +203,14 @@ const Search = () => {
             {/* Results Header - Compact */}
             <div className="flex items-center justify-between mb-5 border-b border-white/5 pb-4">
               <h2 className="text-lg md:text-xl font-black text-white tracking-tighter uppercase">
-                Search <span className="text-streamflow-cyan">Results</span>
+                {deepSearch ? 'Broad Scan' : 'Focused'} <span className="text-streamflow-cyan">Results</span>
               </h2>
-              <span className="text-[9px] font-black text-streamflow-cyan bg-streamflow-cyan/5 px-2 py-0.5 rounded border border-streamflow-cyan/10 uppercase tracking-widest">
-                {results.length} Matches Found
-              </span>
+              <div className="flex flex-col items-end gap-1">
+                <span className="text-[9px] font-black text-streamflow-cyan bg-streamflow-cyan/5 px-2 py-0.5 rounded border border-streamflow-cyan/10 uppercase tracking-widest">
+                  {results.length} Active Data Nodes
+                </span>
+                <span className="text-[7px] font-bold text-gray-600 uppercase tracking-widest">Quality Filter: Active</span>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 mb-10">

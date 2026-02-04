@@ -307,5 +307,23 @@ class TMDBClient:
         self._set_cache(cache_key, result, ttl=31536000)  # 1 year (effectively indefinite)
         return result
 
+    async def search_movies(self, query: str, page: int = 1) -> dict[str, Any]:
+        params = {"query": query, "page": page}
+        return await self._make_request("/search/movie", params)
+
+    async def search_tv(self, query: str, page: int = 1) -> dict[str, Any]:
+        params = {"query": query, "page": page}
+        return await self._make_request("/search/tv", params)
+
+    async def discover_movies(self, filters: dict[str, Any], page: int = 1) -> dict[str, Any]:
+        params = {"page": page}
+        params.update(filters)
+        return await self._make_request("/discover/movie", params)
+
+    async def discover_tv(self, filters: dict[str, Any], page: int = 1) -> dict[str, Any]:
+        params = {"page": page}
+        params.update(filters)
+        return await self._make_request("/discover/tv", params)
+
 
 tmdb_client = TMDBClient()

@@ -27,16 +27,16 @@ export const getMovieDetails = async (tmdbId) => {
   return response.data;
 };
 
-export const searchMovies = async (query, filters = {}, page = 1) => {
+export const searchMovies = async (query, filters = {}, page = 1, deepSearch = false) => {
   const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
     if (value !== '' && value !== null && value !== undefined) {
       acc[key] = value;
     }
     return acc;
   }, {});
-  
+
   const response = await api.get(API_ENDPOINTS.MOVIES.SEARCH, {
-    params: { query, page, ...cleanFilters },
+    params: { query, page, ...cleanFilters, deep_search: deepSearch },
   });
   return response.data;
 };

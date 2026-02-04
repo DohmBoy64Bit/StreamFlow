@@ -31,13 +31,21 @@ async def get_top_rated_movies(
 
 @router.get("/search")
 async def search_movies(
-    query: str = Query(..., min_length=1, description="Search query"),
+    query: str | None = Query(None, description="Search query"),
     page: int = Query(1, ge=1, le=1000, description="Page number"),
     genre: int | None = Query(None, description="Genre ID filter"),
     year: int | None = Query(None, ge=1900, le=2100, description="Release year filter"),
     rating: float | None = Query(None, ge=0, le=10, description="Minimum rating filter"),
+    deep_search: bool = Query(False, description="Enable broad multi-search"),
 ) -> dict[str, Any]:
-    return await movie_service.search_movies(query=query, page=page, genre=genre, year=year, rating=rating)
+    return await movie_service.search_movies(
+        query=query, 
+        page=page, 
+        genre=genre, 
+        year=year, 
+        rating=rating,
+        deep_search=deep_search
+    )
 
 
 @router.get("/{tmdb_id}", response_model=MovieDetails)
