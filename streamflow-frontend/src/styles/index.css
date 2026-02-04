@@ -4,25 +4,30 @@
 
 @layer base {
   body {
-    @apply bg-netflix-black text-white antialiased;
+    @apply bg-streamflow-navy text-white antialiased;
+    background: radial-gradient(circle at top center, #161b33 0%, #0a0b1e 100%);
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-netflix-red hover:bg-red-700 text-white font-semibold py-2 px-6 rounded transition-colors duration-200;
+    @apply bg-streamflow-cyan hover:bg-cyan-400 text-streamflow-navy font-bold py-2 px-6 rounded transition-all duration-300 shadow-cyan-glow hover:shadow-cyan-glow-intense;
   }
 
   .btn-secondary {
-    @apply bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded transition-colors duration-200;
+    @apply bg-streamflow-navy-light hover:bg-streamflow-navy text-white font-semibold py-2 px-6 rounded border border-streamflow-blue/30 transition-all duration-300;
   }
 
   .input-field {
-    @apply w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-netflix-red focus:border-transparent text-white;
+    @apply w-full px-4 py-2 bg-streamflow-navy-light/50 backdrop-blur-sm border border-streamflow-blue/30 rounded focus:outline-none focus:ring-2 focus:ring-streamflow-cyan/50 focus:border-streamflow-cyan/50 text-white transition-all duration-300;
   }
 
   .card {
-    @apply bg-netflix-gray-dark rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300;
+    @apply bg-streamflow-navy-light/40 backdrop-blur-md border border-white/10 rounded-lg shadow-lg overflow-hidden hover:shadow-cyan-glow transition-all duration-300;
+  }
+
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
 }
 
@@ -31,7 +36,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }

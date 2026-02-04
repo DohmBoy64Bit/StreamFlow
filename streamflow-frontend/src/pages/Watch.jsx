@@ -54,12 +54,12 @@ const Watch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-netflix-black">
+    <div className="min-h-screen bg-streamflow-navy">
       <div className="container mx-auto px-2 md:px-4 py-4 md:py-6">
         <div className="mb-3 md:mb-4 flex items-center gap-2 md:gap-4">
           <button
             onClick={handleBack}
-            className="flex items-center gap-1 md:gap-2 text-white hover:text-netflix-red transition active:scale-95"
+            className="flex items-center gap-1 md:gap-2 text-white hover:text-streamflow-cyan transition active:scale-95 duration-300"
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M15 19l-7-7 7-7" />

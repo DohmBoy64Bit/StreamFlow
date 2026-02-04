@@ -49,3 +49,13 @@ def remove_item_from_list(db: Session, list_id: uuid.UUID, item_id: uuid.UUID) -
 
 def get_list_items(db: Session, list_id: uuid.UUID) -> list[ListItem]:
     return db.query(ListItem).filter(ListItem.list_id == list_id).all()
+
+
+def update_list_icon(db: Session, list_id: uuid.UUID, user_id: uuid.UUID, icon_url: str) -> List | None:
+    list_obj = get_list_by_id(db, list_id, user_id)
+    if list_obj:
+        list_obj.icon_url = icon_url
+        db.commit()
+        db.refresh(list_obj)
+        return list_obj
+    return None

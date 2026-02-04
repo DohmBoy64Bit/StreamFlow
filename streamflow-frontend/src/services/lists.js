@@ -33,3 +33,15 @@ export const removeItemFromList = async (listId, itemId) => {
   const response = await api.delete(API_ENDPOINTS.LISTS.REMOVE_ITEM(listId, itemId));
   return response.data;
 };
+
+export const updateListIcon = async (listId, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await api.post(`${API_ENDPOINTS.LISTS.GET_ALL}/${listId}/icon`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};

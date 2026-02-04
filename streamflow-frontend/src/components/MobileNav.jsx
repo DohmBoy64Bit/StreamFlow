@@ -3,13 +3,12 @@ import { ROUTES } from '../utils/constants';
 
 const MobileNav = () => {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-netflix-gray-dark border-t border-gray-700 z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-panel border-t border-white/10 z-50">
       <div className="flex justify-around items-center h-16">
         <NavLink
           to={ROUTES.HOME}
           className={({ isActive }) =>
-            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              isActive ? 'text-netflix-red' : 'text-gray-400 hover:text-white'
+            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive ? 'text-streamflow-cyan shadow-[0_4px_10px_-4px_rgba(0,255,255,0.4)]' : 'text-gray-400 hover:text-white'
             }`
           }
         >
@@ -22,8 +21,7 @@ const MobileNav = () => {
         <NavLink
           to={ROUTES.SEARCH}
           className={({ isActive }) =>
-            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              isActive ? 'text-netflix-red' : 'text-gray-400 hover:text-white'
+            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive ? 'text-streamflow-cyan shadow-[0_4px_10px_-4px_rgba(0,255,255,0.4)]' : 'text-gray-400 hover:text-white'
             }`
           }
         >
@@ -36,8 +34,7 @@ const MobileNav = () => {
         <NavLink
           to={ROUTES.LISTS}
           className={({ isActive }) =>
-            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              isActive ? 'text-netflix-red' : 'text-gray-400 hover:text-white'
+            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive ? 'text-streamflow-cyan shadow-[0_4px_10px_-4px_rgba(0,255,255,0.4)]' : 'text-gray-400 hover:text-white'
             }`
           }
         >
@@ -50,8 +47,7 @@ const MobileNav = () => {
         <NavLink
           to={ROUTES.PROFILE}
           className={({ isActive }) =>
-            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              isActive ? 'text-netflix-red' : 'text-gray-400 hover:text-white'
+            `flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive ? 'text-streamflow-cyan shadow-[0_4px_10px_-4px_rgba(0,255,255,0.4)]' : 'text-gray-400 hover:text-white'
             }`
           }
         >

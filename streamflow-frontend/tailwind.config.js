@@ -7,6 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        streamflow: {
+          cyan: '#00FFFF',
+          blue: '#0047AB',
+          navy: '#0a0b1e',
+          'navy-light': '#161b33',
+        },
         netflix: {
           red: '#E50914',
           black: '#141414',
@@ -16,6 +22,14 @@ export default {
             dark: '#2F2F2F',
           }
         }
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      boxShadow: {
+        'cyan-glow': '0 0 15px rgba(0, 255, 255, 0.4)',
+        'cyan-glow-intense': '0 0 25px rgba(0, 255, 255, 0.6)',
+        'blue-glow': '0 0 15px rgba(0, 71, 171, 0.4)',
       }
     },
   },

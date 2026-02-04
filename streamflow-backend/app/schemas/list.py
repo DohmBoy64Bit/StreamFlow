@@ -30,6 +30,8 @@ class ListResponse(BaseModel):
     name: str = Field(..., description="List name")
     created_at: str = Field(..., description="List creation timestamp")
     updated_at: str = Field(..., description="List last update timestamp")
+    icon_url: str | None = Field(default=None, description="URL to the custom list icon")
+    item_count: int = Field(default=0, description="Number of items in the list")
 
 
 class ListWithItemsResponse(BaseModel):
@@ -39,4 +41,5 @@ class ListWithItemsResponse(BaseModel):
     name: str = Field(..., description="List name")
     created_at: str = Field(..., description="List creation timestamp")
     updated_at: str = Field(..., description="List last update timestamp")
+    icon_url: str | None = Field(default=None, description="URL to the custom list icon")
     items: list[ListItemResponse] = Field(default=[], description="Items in the list")

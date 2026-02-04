@@ -52,9 +52,12 @@ const Recover = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-netflix-black flex items-center justify-center px-4">
-        <div className="w-full max-w-md">
-          <div className="bg-netflix-gray-dark rounded-lg shadow-xl p-8 text-center">
+      <div className="min-h-screen bg-streamflow-navy flex items-center justify-center px-4 relative overflow-hidden">
+        {/* Background Ambient Glows */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-streamflow-blue/10 blur-[150px] rounded-full" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-streamflow-cyan/10 blur-[150px] rounded-full" />
+        <div className="w-full max-w-md relative z-10">
+          <div className="card p-8 text-center border-white/5">
             <div className="mb-4">
               <svg
                 className="mx-auto h-16 w-16 text-green-500"
@@ -81,14 +84,14 @@ const Recover = () => {
   }
 
   return (
-    <div className="min-h-screen bg-netflix-black flex items-center justify-center px-4">
+    <div className="min-h-screen bg-streamflow-navy flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-netflix-red mb-2">StreamFlow</h1>
-          <p className="text-gray-400">Recover Your Account</p>
+          <h1 className="text-5xl font-black text-streamflow-cyan mb-2 tracking-tighter" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 255, 255, 0.4))' }}>StreamFlow</h1>
+          <p className="text-cyan-100/50 font-light tracking-wide italic">Recover Your Account</p>
         </div>
 
-        <div className="bg-netflix-gray-dark rounded-lg shadow-xl p-8">
+        <div className="card p-8 border-white/5">
           <h2 className="text-2xl font-bold text-white mb-6">Reset Password</h2>
 
           {error && (
@@ -173,7 +176,7 @@ const Recover = () => {
             <div className="text-center">
               <button
                 type="button"
-                className="text-sm text-gray-400 hover:text-netflix-red transition-colors"
+                className="text-sm text-gray-400 hover:text-streamflow-cyan transition-all duration-300"
                 onClick={() => navigate('/login')}
               >
                 Back to Login

@@ -19,6 +19,8 @@ class WatchHistoryItem(BaseModel):
     id: str
     tmdb_id: int
     media_type: str
+    title: str | None = None
+    poster_path: str | None = None
     season_number: int
     episode_number: int
     last_position: int

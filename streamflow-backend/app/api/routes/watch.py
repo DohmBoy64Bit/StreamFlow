@@ -24,7 +24,7 @@ async def save_watch_position(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        watch_entry = record_watch_position(
+        watch_entry = await record_watch_position(
             db,
             current_user.id,
             request.tmdb_id,
@@ -48,7 +48,7 @@ async def get_resume_position_endpoint(
     episode: int = Query(default=0, ge=0),
 ) -> WatchPositionResponse:
     try:
-        position = get_resume_position(db, current_user.id, tmdb_id, media_type, season, episode)
+        position = await get_resume_position(db, current_user.id, tmdb_id, media_type, season, episode)
         return WatchPositionResponse(position=position)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get resume position: {str(e)}")
@@ -62,16 +62,18 @@ async def get_watch_history_endpoint(
     offset: int = Query(default=0, ge=0),
 ) -> WatchHistoryResponse:
     try:
-        history = get_watch_history(db, current_user.id, limit, offset)
+        history = await get_watch_history(db, current_user.id, limit, offset)
         items = [
             WatchHistoryItem(
-                id=str(item.id),
-                tmdb_id=item.tmdb_id,
-                media_type=item.media_type,
-                season_number=item.season_number,
-                episode_number=item.episode_number,
-                last_position=item.last_position,
-                watched_at=item.watched_at.isoformat(),
+                id=str(item["id"]),
+                tmdb_id=item["tmdb_id"],
+                media_type=item["media_type"],
+                title=item["title"],
+                poster_path=item["poster_path"],
+                season_number=item["season_number"],
+                episode_number=item["episode_number"],
+                last_position=item["last_position"],
+                watched_at=item["watched_at"].isoformat(),
             )
             for item in history
         ]

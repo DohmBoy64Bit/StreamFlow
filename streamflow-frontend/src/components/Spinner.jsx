@@ -8,7 +8,7 @@ const Spinner = ({ size = 'md', className = '' }) => {
   };
 
   return (
-    <div className={`inline-block ${sizeClasses[size]} border-netflix-red border-t-transparent rounded-full animate-spin ${className}`} />
+    <div className={`inline-block ${sizeClasses[size]} border-streamflow-cyan border-t-transparent rounded-full animate-spin ${className}`} />
   );
 };
 

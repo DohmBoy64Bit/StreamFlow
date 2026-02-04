@@ -6,9 +6,9 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-netflix-black flex items-center justify-center">
+      <div className="min-h-screen bg-streamflow-navy flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-netflix-red"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-streamflow-cyan border-t-transparent"></div>
           <p className="mt-4 text-gray-400">Loading...</p>
         </div>
       </div>

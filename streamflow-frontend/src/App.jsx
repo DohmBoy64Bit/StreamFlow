@@ -21,7 +21,7 @@ function App() {
       <AuthProvider>
         <Suspense
           fallback={
-            <div className="min-h-screen bg-netflix-black flex items-center justify-center">
+            <div className="min-h-screen bg-streamflow-navy flex items-center justify-center">
               <Spinner size="lg" />
             </div>
           }
@@ -29,70 +29,70 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/recover" element={<Recover />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/search"
-            element={
-              <ProtectedRoute>
-                <Search />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/movie/:id"
-            element={
-              <ProtectedRoute>
-                <Movie />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/show/:id"
-            element={
-              <ProtectedRoute>
-                <Show />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/watch/:type/:id"
-            element={
-              <ProtectedRoute>
-                <Watch />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/lists"
-            element={
-              <ProtectedRoute>
-                <Lists />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/lists/:id"
-            element={
-              <ProtectedRoute>
-                <ListDetail />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <Search />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/movie/:id"
+              element={
+                <ProtectedRoute>
+                  <Movie />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/show/:id"
+              element={
+                <ProtectedRoute>
+                  <Show />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/watch/:type/:id"
+              element={
+                <ProtectedRoute>
+                  <Watch />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/lists"
+              element={
+                <ProtectedRoute>
+                  <Lists />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/lists/:id"
+              element={
+                <ProtectedRoute>
+                  <ListDetail />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

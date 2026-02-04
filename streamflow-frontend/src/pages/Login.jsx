@@ -80,21 +80,24 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-netflix-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-streamflow-navy flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background Ambient Glows */}
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-streamflow-blue/10 blur-[150px] rounded-full" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-streamflow-cyan/10 blur-[150px] rounded-full" />
+
+      <div className="w-full max-w-md relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-netflix-red mb-2">StreamFlow</h1>
-          <p className="text-gray-400">Your Netflix-style streaming platform</p>
+          <h1 className="text-5xl font-black text-streamflow-cyan mb-2 tracking-tighter" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 255, 255, 0.4))' }}>StreamFlow</h1>
+          <p className="text-cyan-100/50 font-light tracking-wide italic">Level up your streaming experience</p>
         </div>
 
-        <div className="bg-netflix-gray-dark rounded-lg shadow-xl p-8">
-          <div className="flex mb-6 border-b border-gray-700">
+        <div className="card p-8 border-white/5 shadow-2xl">
+          <div className="flex mb-6 border-b border-white/10">
             <button
-              className={`flex-1 py-2 text-center font-semibold transition-colors ${
-                activeTab === 'login'
-                  ? 'text-netflix-red border-b-2 border-netflix-red'
-                  : 'text-gray-400 hover:text-white'
-              }`}
+              className={`flex-1 py-3 text-center font-semibold transition-all duration-300 ${activeTab === 'login'
+                ? 'text-streamflow-cyan border-b-2 border-streamflow-cyan shadow-[0_4px_10px_-4px_rgba(0,255,255,0.4)]'
+                : 'text-gray-400 hover:text-white'
+                }`}
               onClick={() => {
                 setActiveTab('login');
                 setError('');
@@ -103,11 +106,10 @@ const Login = () => {
               Login
             </button>
             <button
-              className={`flex-1 py-2 text-center font-semibold transition-colors ${
-                activeTab === 'register'
-                  ? 'text-netflix-red border-b-2 border-netflix-red'
-                  : 'text-gray-400 hover:text-white'
-              }`}
+              className={`flex-1 py-3 text-center font-semibold transition-all duration-300 ${activeTab === 'register'
+                ? 'text-streamflow-cyan border-b-2 border-streamflow-cyan shadow-[0_4px_10px_-4px_rgba(0,255,255,0.4)]'
+                : 'text-gray-400 hover:text-white'
+                }`}
               onClick={() => {
                 setActiveTab('register');
                 setError('');
@@ -166,7 +168,7 @@ const Login = () => {
               <div className="text-center">
                 <button
                   type="button"
-                  className="text-sm text-gray-400 hover:text-netflix-red transition-colors"
+                  className="text-sm text-gray-400 hover:text-streamflow-cyan transition-all duration-300"
                   onClick={() => navigate('/recover')}
                 >
                   Forgot password?
@@ -234,14 +236,14 @@ const Login = () => {
 
       <Dialog
         open={showRecoveryCodes}
-        onClose={() => {}}
+        onClose={() => { }}
         className="relative z-50"
       >
         <div className="fixed inset-0 bg-black/75" aria-hidden="true" />
 
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="mx-auto max-w-lg rounded-lg bg-netflix-gray-dark p-6 shadow-2xl">
-            <Dialog.Title className="text-2xl font-bold text-netflix-red mb-4">
+          <Dialog.Panel className="mx-auto max-w-lg card glass-panel p-6 border-white/10">
+            <Dialog.Title className="text-2xl font-black text-streamflow-cyan mb-4 tracking-tight" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 255, 255, 0.4))' }}>
               Save Your Recovery Codes
             </Dialog.Title>
 

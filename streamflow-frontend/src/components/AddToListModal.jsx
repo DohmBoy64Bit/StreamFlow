@@ -63,7 +63,7 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
       await fetchLists();
       setNewListName('');
       setShowCreateForm(false);
-      
+
       if (newList?.id) {
         await handleAddToList(newList.id);
       }
@@ -79,8 +79,8 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className="bg-netflix-gray-dark rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto">
-        <div className="sticky top-0 bg-netflix-gray-dark border-b border-gray-700 p-6">
+      <div className="card glass-panel max-w-md w-full max-h-[80vh] overflow-y-auto border-white/10">
+        <div className="sticky top-0 bg-streamflow-navy/80 backdrop-blur-md border-b border-white/10 p-6 z-20">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-white">Add to List</h2>
             <button
@@ -117,7 +117,7 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
 
           {loading ? (
             <div className="text-center py-8">
-              <div className="inline-block w-8 h-8 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
+              <div className="inline-block w-8 h-8 border-4 border-streamflow-cyan border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : showCreateForm ? (
             <form onSubmit={handleCreateList} className="space-y-4">
@@ -126,7 +126,7 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
                 value={newListName}
                 onChange={(e) => setNewListName(e.target.value)}
                 placeholder="New list name"
-                className="w-full px-4 py-3 bg-netflix-gray-light text-white rounded border border-gray-600 focus:border-netflix-red focus:outline-none"
+                className="w-full px-4 py-3 bg-streamflow-navy-light/50 backdrop-blur-sm text-white rounded border border-white/10 focus:border-streamflow-cyan/50 focus:outline-none"
                 autoFocus
                 maxLength={100}
               />
@@ -170,7 +170,7 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
                       key={list.id}
                       onClick={() => handleAddToList(list.id)}
                       disabled={addingToList}
-                      className="w-full text-left px-4 py-3 bg-netflix-gray-light hover:bg-netflix-red text-white rounded transition disabled:opacity-50"
+                      className="w-full text-left px-4 py-3 bg-streamflow-navy-light/50 hover:bg-streamflow-cyan hover:text-streamflow-navy text-white rounded transition-all duration-300 disabled:opacity-50"
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{list.name}</span>
@@ -182,7 +182,7 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
                   ))}
                   <button
                     onClick={() => setShowCreateForm(true)}
-                    className="w-full text-left px-4 py-3 bg-netflix-gray-light hover:bg-gray-700 text-white rounded transition border-2 border-dashed border-gray-600"
+                    className="w-full text-left px-4 py-3 bg-streamflow-navy-light/30 hover:bg-white/5 text-white rounded transition-all duration-300 border-2 border-dashed border-white/10"
                   >
                     <span className="font-medium">+ Create New List</span>
                   </button>

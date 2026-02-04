@@ -71,3 +71,10 @@ def remove_item_from_list(
 def get_list_items(db: Session, list_id: uuid.UUID, user_id: uuid.UUID) -> list[ListItem]:
     get_list_by_id(db, list_id, user_id)
     return list_repo.get_list_items(db, list_id)
+
+
+def update_list_icon(db: Session, list_id: uuid.UUID, user_id: uuid.UUID, icon_url: str) -> List:
+    list_obj = list_repo.update_list_icon(db, list_id, user_id, icon_url)
+    if not list_obj:
+        raise ListNotFoundError(f"List with id {list_id} not found or access denied")
+    return list_obj

@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     REDIS_ENABLED: bool = False
 
-    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://192.168.1.253:5173"
 
     DEBUG: bool = True
 

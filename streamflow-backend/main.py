@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -17,6 +18,10 @@ from app.core.database import engine
 from app.core.middleware import global_exception_handler, limiter
 from app.models.db_models import Base
 
+
+import os
+if not os.path.exists("uploads"):
+    os.makedirs("uploads")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -43,6 +48,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/api/v1/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(lists_router, prefix="/api/v1/lists", tags=["lists"])

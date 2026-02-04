@@ -71,105 +71,178 @@ const Search = () => {
   };
 
   return (
-    <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
+    <div className="min-h-screen bg-streamflow-navy pb-20 md:pb-0">
       <Navbar />
 
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 md:mb-8">Search</h1>
+      <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-6xl">
+        {/* Compact Hero Header */}
+        <div className="card p-5 md:p-6 mb-8 border-white/5 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-streamflow-cyan/5 blur-[60px] rounded-full -mr-16 -mt-16 group-hover:bg-streamflow-cyan/10 transition-all duration-700"></div>
 
+          <div className="relative z-10">
+            <h1 className="text-2xl md:text-4xl font-black text-white mb-1 tracking-tight">
+              Discover <span className="text-streamflow-cyan">Content</span>
+            </h1>
+            <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest opacity-80">Syncing with TMDB Archives</p>
+          </div>
+        </div>
+
+        {/* Compact Search Form */}
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="flex flex-col md:flex-row gap-3 md:gap-4">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for movies or TV shows..."
-              className="flex-1 px-4 py-3 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
-            />
-            <button type="submit" className="btn-primary px-6 md:px-8">
-              Search
-            </button>
+          {/* Main Search Bar - Ultra Compact */}
+          <div className="card p-3 md:p-4 border-white/5 bg-white/[0.01] mb-6">
+            <div className="flex flex-col md:flex-row gap-2.5">
+              <div className="flex-1 relative">
+                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search for movies or TV shows..."
+                  className="w-full pl-11 pr-4 py-2.5 bg-streamflow-navy-light/50 backdrop-blur-sm border border-white/10 text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-streamflow-cyan/30 focus:border-streamflow-cyan/30 transition-all duration-300 text-xs font-medium placeholder:text-gray-600"
+                />
+              </div>
+              <button type="submit" className="btn-primary py-2.5 px-6 md:px-8 text-xs font-black shadow-cyan-glow/10 flex items-center justify-center gap-2 transition-transform hover:scale-105">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Search
+              </button>
+            </div>
           </div>
 
+          {/* Filters Toggle (Mobile) */}
           <button
             type="button"
             onClick={() => setShowFilters(!showFilters)}
-            className="md:hidden mt-4 text-netflix-red flex items-center gap-2"
+            className="md:hidden mb-4 px-3 py-1.5 glass-panel border-white/5 rounded-lg text-streamflow-cyan hover:bg-white/[0.05] flex items-center gap-2 transition-all duration-300 font-black text-[10px] uppercase tracking-widest"
           >
-            {showFilters ? '▼' : '▶'} Filters
+            <svg className={`w-3 h-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+            </svg>
+            {showFilters ? 'Hide' : 'Show'} Filters
           </button>
 
-          <div className={`mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 ${showFilters ? 'block' : 'hidden md:grid'}`}>
-            <input
-              type="number"
-              value={filters.year}
-              onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-              placeholder="Year (e.g., 2023)"
-              className="px-4 py-2 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
-            />
-            <input
-              type="text"
-              value={filters.genre}
-              onChange={(e) => setFilters({ ...filters, genre: e.target.value })}
-              placeholder="Genre ID (e.g., 28 for Action)"
-              className="px-4 py-2 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
-            />
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="10"
-              value={filters.rating}
-              onChange={(e) => setFilters({ ...filters, rating: e.target.value })}
-              placeholder="Min Rating (0-10)"
-              className="px-4 py-2 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
-            />
+          {/* Filter Cards - Compact Density */}
+          <div className={`grid grid-cols-1 md:grid-cols-3 gap-3 ${showFilters ? 'block' : 'hidden md:grid'}`}>
+            {/* Year Filter */}
+            <div className="card p-3 border-white/5 bg-white/[0.01]">
+              <label className="block text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] mb-1.5 pl-1">Year</label>
+              <input
+                type="number"
+                value={filters.year}
+                onChange={(e) => setFilters({ ...filters, year: e.target.value })}
+                placeholder="e.g., 2023"
+                className="w-full px-3 py-2 bg-streamflow-navy-light/30 border border-white/10 text-white rounded-lg focus:outline-none focus:border-streamflow-cyan/50 text-[11px] font-bold placeholder:text-gray-700"
+              />
+            </div>
+
+            {/* Genre Filter */}
+            <div className="card p-3 border-white/5 bg-white/[0.01]">
+              <label className="block text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] mb-1.5 pl-1">Genre ID</label>
+              <input
+                type="text"
+                value={filters.genre}
+                onChange={(e) => setFilters({ ...filters, genre: e.target.value })}
+                placeholder="e.g., 28 for Action"
+                className="w-full px-3 py-2 bg-streamflow-navy-light/30 border border-white/10 text-white rounded-lg focus:outline-none focus:border-streamflow-cyan/50 text-[11px] font-bold placeholder:text-gray-700"
+              />
+            </div>
+
+            {/* Rating Filter */}
+            <div className="card p-3 border-white/5 bg-white/[0.01]">
+              <label className="block text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] mb-1.5 pl-1">Min Rating</label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                max="10"
+                value={filters.rating}
+                onChange={(e) => setFilters({ ...filters, rating: e.target.value })}
+                placeholder="0.0 - 10.0"
+                className="w-full px-3 py-2 bg-streamflow-navy-light/30 border border-white/10 text-white rounded-lg focus:outline-none focus:border-streamflow-cyan/50 text-[11px] font-bold placeholder:text-gray-700"
+              />
+            </div>
           </div>
         </form>
 
+        {/* Loading State */}
         {loading && (
-          <div className="text-center py-12">
-            <Spinner size="lg" />
+          <div className="text-center py-20 flex flex-col items-center">
+            <Spinner size="md" />
+            <p className="text-[10px] font-black text-gray-600 mt-4 uppercase tracking-widest animate-pulse">Scanning Transmission Banks</p>
           </div>
         )}
 
+        {/* Error State */}
         {error && (
           <ErrorMessage message={error} onRetry={handleSearch} className="mb-8" />
         )}
 
+        {/* Results Grid */}
         {!loading && results.length > 0 && (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 mb-8">
+          <div className="animate-fadeIn">
+            {/* Results Header - Compact */}
+            <div className="flex items-center justify-between mb-5 border-b border-white/5 pb-4">
+              <h2 className="text-lg md:text-xl font-black text-white tracking-tighter uppercase">
+                Search <span className="text-streamflow-cyan">Results</span>
+              </h2>
+              <span className="text-[9px] font-black text-streamflow-cyan bg-streamflow-cyan/5 px-2 py-0.5 rounded border border-streamflow-cyan/10 uppercase tracking-widest">
+                {results.length} Matches Found
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 mb-10">
               {results.map((item) => (
                 <MovieCard key={item.id} item={item} onClick={handleItemClick} />
               ))}
             </div>
 
-            <div className="flex justify-center items-center gap-2 md:gap-4">
+            {/* Pagination - Compact */}
+            <div className="flex justify-center items-center gap-3">
               <button
                 onClick={handlePrevPage}
                 disabled={page === 1}
-                className="btn-secondary px-3 py-2 md:px-6 md:py-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                className="glass-panel px-4 py-2 border-white/5 rounded-lg text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/[0.05] disabled:opacity-20 flex items-center gap-1.5"
               >
-                Previous
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+                Prev
               </button>
-              <span className="text-white text-sm md:text-base">
-                Page {page} of {totalPages}
-              </span>
+
+              <div className="px-3 py-1.5 bg-streamflow-cyan/5 border border-white/5 rounded-lg">
+                <span className="text-streamflow-cyan text-[10px] font-black">
+                  {page} <span className="opacity-30 mx-1">/</span> {totalPages}
+                </span>
+              </div>
+
               <button
                 onClick={handleNextPage}
                 disabled={page === totalPages}
-                className="btn-secondary px-3 py-2 md:px-6 md:py-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                className="glass-panel px-4 py-2 border-white/5 rounded-lg text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/[0.05] disabled:opacity-20 flex items-center gap-1.5"
               >
                 Next
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
-          </>
+          </div>
         )}
 
+        {/* Empty State - Compact */}
         {!loading && query && results.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">No results found for &quot;{query}&quot;</p>
+          <div className="text-center py-16 glass-panel border-white/5 rounded-3xl animate-slideUp">
+            <div className="w-16 h-16 bg-white/[0.02] rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
+              <svg className="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M11 15h2m-2 4h2m2-4v1a1 1 0 01-1 1h-6a1 1 0 01-1-1v-1m3-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-black text-white mb-1 uppercase tracking-tight">Access Denied</h3>
+            <p className="text-gray-600 text-[10px] font-black uppercase tracking-widest">No matching records found for "{query}"</p>
           </div>
         )}
       </div>

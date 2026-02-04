@@ -35,4 +35,32 @@ async def search_movies(
     if rating:
         filters["vote_average.gte"] = rating
 
-    return await tmdb_client.search_multi(query=query, page=page, filters=filters)
+    data = await tmdb_client.search_multi(query=query, page=page, filters=filters)
+    
+    # Filter results for quality and watchability
+    if "results" in data:
+        filtered_results = []
+        for item in data["results"]:
+            media_type = item.get("media_type")
+            
+            # 1. Must be a movie or TV show
+            if media_type not in ["movie", "tv"]:
+                continue
+                
+            # 2. Must have a poster (high correlation with metadata quality)
+            if not item.get("poster_path"):
+                continue
+                
+            # 3. Must have a release/air date (prevents unreleased/placeholder entries)
+            if media_type == "movie":
+                if not item.get("release_date"):
+                    continue
+            elif media_type == "tv":
+                if not item.get("first_air_date"):
+                    continue
+            
+            filtered_results.append(item)
+            
+        data["results"] = filtered_results
+        
+    return data

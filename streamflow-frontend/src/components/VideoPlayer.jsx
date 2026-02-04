@@ -128,7 +128,7 @@ const VideoPlayer = ({ tmdbId, type, season, episode, onError }) => {
     return (
       <div className="w-full aspect-video bg-black flex items-center justify-center rounded-lg">
         <div className="text-center">
-          <div className="inline-block w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="inline-block w-12 h-12 border-4 border-streamflow-cyan border-t-transparent rounded-full animate-spin mb-4"></div>
           <p className="text-white">Loading player...</p>
         </div>
       </div>
@@ -148,8 +148,8 @@ const VideoPlayer = ({ tmdbId, type, season, episode, onError }) => {
     );
   }
 
-  const currentUrl = currentUrlIndex === 0 
-    ? playerData.primary_url 
+  const currentUrl = currentUrlIndex === 0
+    ? playerData.primary_url
     : playerData.fallback_urls[currentUrlIndex - 1];
 
   return (
@@ -163,7 +163,7 @@ const VideoPlayer = ({ tmdbId, type, season, episode, onError }) => {
         onError={handleIframeError}
         title="Video Player"
       />
-      
+
       <button
         onClick={toggleFullscreen}
         className="absolute bottom-4 right-4 bg-black bg-opacity-60 hover:bg-opacity-80 text-white p-3 rounded-lg transition z-10"

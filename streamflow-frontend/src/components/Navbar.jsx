@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-netflix-gray-dark shadow-lg sticky top-0 z-50">
+    <nav className="glass-panel sticky top-0 z-50 transition-all duration-300">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to={ROUTES.HOME} className="flex items-center">
@@ -43,18 +43,18 @@ const Navbar = () => {
           </button>
 
           <div className="hidden md:flex items-center gap-6">
-            <Link to={ROUTES.HOME} className="text-gray-300 hover:text-white transition">
+            <Link to={ROUTES.HOME} className="text-gray-300 hover:text-streamflow-cyan transition-all duration-300">
               Home
             </Link>
-            <Link to={ROUTES.SEARCH} className="text-gray-300 hover:text-white transition">
+            <Link to={ROUTES.SEARCH} className="text-gray-300 hover:text-streamflow-cyan transition-all duration-300">
               Search
             </Link>
             {isAuthenticated && (
               <>
-                <Link to={ROUTES.LISTS} className="text-gray-300 hover:text-white transition">
+                <Link to={ROUTES.LISTS} className="text-gray-300 hover:text-streamflow-cyan transition-all duration-300">
                   My Lists
                 </Link>
-                <Link to={ROUTES.PROFILE} className="text-gray-300 hover:text-white transition">
+                <Link to={ROUTES.PROFILE} className="text-gray-300 hover:text-streamflow-cyan transition-all duration-300">
                   Profile
                 </Link>
                 <span className="text-gray-400">|</span>
@@ -73,7 +73,7 @@ const Navbar = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-gray-700 pt-4">
+          <div className="md:hidden mt-4 pb-4 border-t border-white/10 pt-4 animate-in fade-in slide-in-from-top-4 duration-300">
             <div className="flex flex-col gap-4">
               <Link
                 to={ROUTES.HOME}
@@ -105,7 +105,7 @@ const Navbar = () => {
                   >
                     Profile
                   </Link>
-                  <div className="border-t border-gray-700 pt-4">
+                  <div className="border-t border-white/10 pt-4">
                     <span className="text-gray-300 block mb-2">{user?.username}</span>
                     <button onClick={handleLogout} className="btn-secondary w-full">
                       Logout
