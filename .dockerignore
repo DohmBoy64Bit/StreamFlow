@@ -1,0 +1,73 @@
+# Combined .dockerignore for root Dockerfile
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Zenflow
+.zenflow/
+
+# Python
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+**/*.so
+**/*.egg
+**/*.egg-info
+**/dist
+**/build
+streamflow-backend/venv
+streamflow-backend/env
+streamflow-backend/ENV
+streamflow-backend/.venv
+streamflow-backend/*.db
+streamflow-backend/*.sqlite
+streamflow-backend/*.sqlite3
+streamflow-backend/uploads/*
+!streamflow-backend/uploads/.gitkeep
+streamflow-backend/.pytest_cache
+streamflow-backend/htmlcov
+streamflow-backend/.coverage
+streamflow-backend/**/*.log
+
+# Node
+streamflow-frontend/node_modules
+streamflow-frontend/npm-debug.log*
+streamflow-frontend/yarn-debug.log*
+streamflow-frontend/yarn-error.log*
+streamflow-frontend/.pnpm-debug.log*
+streamflow-frontend/dist
+streamflow-frontend/.DS_Store
+
+# Environment files
+**/.env
+**/.env.local
+**/.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+**/*.swp
+**/*.swo
+**/*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Individual Dockerfiles (we're using the combined one)
+streamflow-backend/Dockerfile
+streamflow-backend/.dockerignore
+streamflow-frontend/Dockerfile
+streamflow-frontend/.dockerignore
+streamflow-frontend/nginx.conf
+
+# Deployment docs
+DEPLOYMENT.md
+HOSTING_REQUIREMENTS.md

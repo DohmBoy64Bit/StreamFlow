@@ -64,3 +64,28 @@ app.include_router(vidsrc_router, prefix="/api/v1/vidsrc", tags=["vidsrc"])
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
+
+
+# Serve frontend static files (must be after all API routes)
+from fastapi.responses import FileResponse
+
+frontend_dist = os.path.join(os.path.dirname(__file__), "frontend-dist")
+
+if os.path.exists(frontend_dist):
+    # Mount static assets
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="frontend-assets")
+    
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        """Serve frontend SPA - fallback to index.html for client-side routing."""
+        # Try to serve the requested file
+        file_path = os.path.join(frontend_dist, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        
+        # Fallback to index.html for SPA routing
+        index_path = os.path.join(frontend_dist, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        
+        return {"error": "Frontend not built"}
