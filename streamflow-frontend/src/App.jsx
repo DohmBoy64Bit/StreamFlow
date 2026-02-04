@@ -9,6 +9,8 @@ import Movie from './pages/Movie';
 import Show from './pages/Show';
 import Watch from './pages/Watch';
 import Profile from './pages/Profile';
+import Lists from './pages/Lists';
+import ListDetail from './pages/ListDetail';
 
 function App() {
   return (
@@ -62,6 +64,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lists"
+            element={
+              <ProtectedRoute>
+                <Lists />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lists/:id"
+            element={
+              <ProtectedRoute>
+                <ListDetail />
               </ProtectedRoute>
             }
           />
