@@ -7,6 +7,19 @@
     @apply bg-streamflow-navy text-white antialiased;
     background: radial-gradient(circle at top center, #161b33 0%, #0a0b1e 100%);
   }
+
+  /* Suppress Numeric Input Spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 }
 
 @layer components {
