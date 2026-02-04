@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to={ROUTES.HOME} className="flex items-center">
-            <img src="/assets/logo_long.png" alt="StreamFlow" className="h-8 md:h-10" />
+            <img src="/assets/logo_long.png" alt="StreamFlow" className="h-8 md:h-10" style={{ filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8))' }} />
           </Link>
 
           <button
