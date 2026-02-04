@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
+import MobileNav from '../components/MobileNav';
+import Spinner from '../components/Spinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { getTrendingMovies, getPopularMovies, getTopRatedMovies } from '../services/movies';
 import { getTrendingTV, getPopularTV } from '../services/tv';
 import { getWatchHistory } from '../services/watch';
@@ -95,49 +98,49 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12 text-center">
-          <div className="inline-block w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
+          <Spinner size="lg" />
         </div>
+        <MobileNav />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
-          <div className="bg-red-900 bg-opacity-50 border border-red-700 text-white px-4 py-3 rounded-lg">
-            {error}
-          </div>
+          <ErrorMessage message={error} onRetry={fetchAllContent} />
         </div>
         <Footer />
+        <MobileNav />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-netflix-black">
+    <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
       <Navbar />
 
-      <div className="relative h-[80vh] bg-gradient-to-b from-netflix-gray-dark to-netflix-black flex items-center justify-center">
+      <div className="relative h-[60vh] md:h-[80vh] bg-gradient-to-b from-netflix-gray-dark to-netflix-black flex items-center justify-center">
         <div className="text-center px-4">
-          <img src="/assets/logo.jpg" alt="StreamFlow" className="h-32 md:h-40 mx-auto mb-8" />
-          <p className="text-xl md:text-2xl text-gray-400 mb-8">
+          <img src="/assets/logo.jpg" alt="StreamFlow" className="h-24 md:h-32 lg:h-40 mx-auto mb-4 md:mb-8" />
+          <p className="text-lg md:text-xl lg:text-2xl text-gray-400 mb-6 md:mb-8">
             Unlimited movies, TV shows, and more
           </p>
           <button
             onClick={() => navigate('/search')}
-            className="btn-primary px-8 py-4 text-lg"
+            className="btn-primary px-6 py-3 md:px-8 md:py-4 text-base md:text-lg"
           >
             Browse Content
           </button>
         </div>
       </div>
 
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-4 md:py-8">
         {isAuthenticated && contentData.continueWatching.length > 0 && (
           <Carousel
             title="Continue Watching"
@@ -186,6 +189,7 @@ const Home = () => {
       </div>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };

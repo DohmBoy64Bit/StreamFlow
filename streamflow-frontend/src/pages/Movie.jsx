@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import MobileNav from '../components/MobileNav';
+import Spinner from '../components/Spinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { getMovieDetails } from '../services/movies';
 import { getUserLists, addItemToList } from '../services/lists';
 import { useAuth } from '../hooks/useAuth';
@@ -72,25 +75,25 @@ const Movie = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12 text-center">
-          <div className="inline-block w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
+          <Spinner size="lg" />
         </div>
+        <MobileNav />
       </div>
     );
   }
 
   if (error || !movie) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
-          <div className="bg-red-900 bg-opacity-50 border border-red-700 text-white px-4 py-3 rounded-lg">
-            {error || 'Movie not found'}
-          </div>
+          <ErrorMessage message={error || 'Movie not found'} onRetry={fetchMovieDetails} />
         </div>
         <Footer />
+        <MobileNav />
       </div>
     );
   }
@@ -101,36 +104,36 @@ const Movie = () => {
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
 
   return (
-    <div className="min-h-screen bg-netflix-black">
+    <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
       <Navbar />
 
       <div
-        className="relative h-[70vh] bg-cover bg-center"
+        className="relative h-[50vh] md:h-[70vh] bg-cover bg-center"
         style={{
           backgroundImage: backdropPath
             ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(20,20,20,0.9)), url(${imageBaseUrl}${backdropPath})`
             : 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(20,20,20,1))',
         }}
       >
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 lg:p-12">
           <div className="container mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{movie.title}</h1>
-            <div className="flex items-center gap-4 text-gray-300 mb-6">
+            <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-2 md:mb-4">{movie.title}</h1>
+            <div className="flex items-center gap-2 md:gap-4 text-sm md:text-base text-gray-300 mb-4 md:mb-6">
               <span className="text-yellow-400 font-semibold">
                 ⭐ {movie.vote_average?.toFixed(1) || 'N/A'}
               </span>
               <span>{releaseYear}</span>
               {movie.runtime && <span>{movie.runtime} min</span>}
             </div>
-            <div className="flex gap-4 mb-4">
-              <button onClick={handleWatch} className="btn-primary px-8 py-3 text-lg">
+            <div className="flex flex-wrap gap-2 md:gap-4 mb-4">
+              <button onClick={handleWatch} className="btn-primary px-4 py-2 md:px-8 md:py-3 text-sm md:text-base lg:text-lg">
                 ▶ Watch Now
               </button>
               {isAuthenticated && (
                 <div className="relative">
                   <button
                     onClick={() => setShowListDropdown(!showListDropdown)}
-                    className="btn-secondary px-6 py-3"
+                    className="btn-secondary px-4 py-2 md:px-6 md:py-3 text-sm md:text-base"
                     disabled={addingToList}
                   >
                     + Add to List
@@ -164,9 +167,9 @@ const Movie = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
+      <div className="container mx-auto px-4 md:px-8 py-8 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <h2 className="text-2xl font-bold text-white mb-4">Overview</h2>
             <p className="text-gray-300 leading-relaxed mb-6">{movie.overview || 'No overview available.'}</p>
 
@@ -189,13 +192,14 @@ const Movie = () => {
             {movie.credits?.cast && movie.credits.cast.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-xl font-semibold text-white mb-4">Cast</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                   {movie.credits.cast.slice(0, 8).map((actor) => (
                     <div key={actor.id} className="text-center">
                       {actor.profile_path ? (
                         <img
                           src={`${posterBaseUrl}${actor.profile_path}`}
                           alt={actor.name}
+                          loading="lazy"
                           className="w-full h-32 object-cover rounded-lg mb-2"
                         />
                       ) : (
@@ -226,12 +230,13 @@ const Movie = () => {
             )}
           </div>
 
-          <div>
+          <div className="order-1 lg:order-2">
             {movie.poster_path && (
               <img
                 src={`${posterBaseUrl}${movie.poster_path}`}
                 alt={movie.title}
-                className="w-full rounded-lg shadow-xl mb-6"
+                loading="lazy"
+                className="w-full max-w-sm mx-auto lg:max-w-full rounded-lg shadow-xl mb-6"
               />
             )}
             <div className="bg-netflix-gray-dark p-4 rounded-lg">
@@ -266,6 +271,7 @@ const Movie = () => {
       </div>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };

@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import MobileNav from '../components/MobileNav';
 import MovieCard from '../components/MovieCard';
+import Spinner from '../components/Spinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { getListDetails, removeItemFromList } from '../services/lists';
 import { getMovieDetails } from '../services/movies';
 import { getTVDetails } from '../services/tv';
@@ -90,7 +93,7 @@ const ListDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12 text-center">
           <div className="inline-block w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
@@ -101,7 +104,7 @@ const ListDetail = () => {
 
   if (error || !list) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="bg-red-900 bg-opacity-50 border border-red-700 text-white px-4 py-3 rounded-lg">
@@ -120,7 +123,7 @@ const ListDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-netflix-black">
+    <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
       <Navbar />
 
       <div className="container mx-auto px-4 md:px-8 py-12">
@@ -178,6 +181,7 @@ const ListDetail = () => {
       </div>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };

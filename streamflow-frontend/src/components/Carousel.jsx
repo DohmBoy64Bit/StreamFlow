@@ -7,11 +7,11 @@ const Carousel = ({ title, items, onItemClick }) => {
   }
 
   return (
-    <div className="mb-8">
-      <h2 className="text-2xl font-bold text-white mb-4 px-4 md:px-0">{title}</h2>
-      <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 md:px-0 pb-4">
+    <div className="mb-6 md:mb-8">
+      <h2 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4 px-4 md:px-0">{title}</h2>
+      <div className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 md:px-0 pb-4 touch-pan-x">
         {items.map((item) => (
-          <div key={item.id} className="snap-start">
+          <div key={item.id} className="snap-start flex-shrink-0">
             <MovieCard item={item} onClick={onItemClick} />
           </div>
         ))}

@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import MobileNav from '../components/MobileNav';
 import MovieCard from '../components/MovieCard';
+import Spinner from '../components/Spinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { searchMovies } from '../services/movies';
 
 const Search = () => {
@@ -18,6 +21,7 @@ const Search = () => {
     year: '',
     rating: '',
   });
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleSearch = useCallback(async () => {
     if (!query.trim()) return;
@@ -67,14 +71,14 @@ const Search = () => {
   };
 
   return (
-    <div className="min-h-screen bg-netflix-black">
+    <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-white mb-8">Search</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 md:mb-8">Search</h1>
 
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-4">
             <input
               type="text"
               value={query}
@@ -82,12 +86,20 @@ const Search = () => {
               placeholder="Search for movies or TV shows..."
               className="flex-1 px-4 py-3 bg-netflix-gray-dark text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-netflix-red"
             />
-            <button type="submit" className="btn-primary px-8">
+            <button type="submit" className="btn-primary px-6 md:px-8">
               Search
             </button>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button
+            type="button"
+            onClick={() => setShowFilters(!showFilters)}
+            className="md:hidden mt-4 text-netflix-red flex items-center gap-2"
+          >
+            {showFilters ? '▼' : '▶'} Filters
+          </button>
+
+          <div className={`mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 ${showFilters ? 'block' : 'hidden md:grid'}`}>
             <input
               type="number"
               value={filters.year}
@@ -117,39 +129,37 @@ const Search = () => {
 
         {loading && (
           <div className="text-center py-12">
-            <div className="inline-block w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
+            <Spinner size="lg" />
           </div>
         )}
 
         {error && (
-          <div className="bg-red-900 bg-opacity-50 border border-red-700 text-white px-4 py-3 rounded-lg mb-8">
-            {error}
-          </div>
+          <ErrorMessage message={error} onRetry={handleSearch} className="mb-8" />
         )}
 
         {!loading && results.length > 0 && (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 mb-8">
               {results.map((item) => (
                 <MovieCard key={item.id} item={item} onClick={handleItemClick} />
               ))}
             </div>
 
-            <div className="flex justify-center items-center gap-4">
+            <div className="flex justify-center items-center gap-2 md:gap-4">
               <button
                 onClick={handlePrevPage}
                 disabled={page === 1}
-                className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-secondary px-3 py-2 md:px-6 md:py-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
-              <span className="text-white">
+              <span className="text-white text-sm md:text-base">
                 Page {page} of {totalPages}
               </span>
               <button
                 onClick={handleNextPage}
                 disabled={page === totalPages}
-                className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-secondary px-3 py-2 md:px-6 md:py-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
               </button>
@@ -165,6 +175,7 @@ const Search = () => {
       </div>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };

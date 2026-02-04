@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import MobileNav from '../components/MobileNav';
+import Spinner from '../components/Spinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { getTVDetails, getSeasonDetails } from '../services/tv';
 import { getUserLists, addItemToList } from '../services/lists';
 import { useAuth } from '../hooks/useAuth';
@@ -98,25 +101,25 @@ const Show = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12 text-center">
-          <div className="inline-block w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
+          <Spinner size="lg" />
         </div>
+        <MobileNav />
       </div>
     );
   }
 
   if (error || !show) {
     return (
-      <div className="min-h-screen bg-netflix-black">
+      <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
-          <div className="bg-red-900 bg-opacity-50 border border-red-700 text-white px-4 py-3 rounded-lg">
-            {error || 'TV show not found'}
-          </div>
+          <ErrorMessage message={error || 'TV show not found'} onRetry={fetchShowDetails} />
         </div>
         <Footer />
+        <MobileNav />
       </div>
     );
   }
@@ -129,21 +132,21 @@ const Show = () => {
     : 'N/A';
 
   return (
-    <div className="min-h-screen bg-netflix-black">
+    <div className="min-h-screen bg-netflix-black pb-20 md:pb-0">
       <Navbar />
 
       <div
-        className="relative h-[70vh] bg-cover bg-center"
+        className="relative h-[50vh] md:h-[70vh] bg-cover bg-center"
         style={{
           backgroundImage: backdropPath
             ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(20,20,20,0.9)), url(${imageBaseUrl}${backdropPath})`
             : 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(20,20,20,1))',
         }}
       >
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 lg:p-12">
           <div className="container mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{show.name}</h1>
-            <div className="flex items-center gap-4 text-gray-300 mb-6">
+            <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-2 md:mb-4">{show.name}</h1>
+            <div className="flex items-center gap-2 md:gap-4 text-sm md:text-base text-gray-300 mb-4 md:mb-6">
               <span className="text-yellow-400 font-semibold">
                 ⭐ {show.vote_average?.toFixed(1) || 'N/A'}
               </span>
@@ -362,6 +365,7 @@ const Show = () => {
       </div>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };

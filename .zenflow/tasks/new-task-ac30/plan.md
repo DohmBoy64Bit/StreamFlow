@@ -584,6 +584,7 @@ Implement list management interface.
 ---
 
 ### [ ] Step: Mobile Responsive Design & Polish
+<!-- chat-id: 7b4f07a6-7ee3-44da-93a5-d1f81f788610 -->
 
 Finalize mobile-first responsive design and UI polish.
 

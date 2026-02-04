@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
+import Spinner from '../components/Spinner';
 import { getMovieDetails } from '../services/movies';
 import { getTVDetails, getSeasonDetails } from '../services/tv';
 
@@ -55,21 +56,21 @@ const Watch = () => {
 
   return (
     <div className="min-h-screen bg-netflix-black">
-      <div className="container mx-auto px-4 py-6">
-        <div className="mb-4 flex items-center gap-4">
+      <div className="container mx-auto px-2 md:px-4 py-4 md:py-6">
+        <div className="mb-3 md:mb-4 flex items-center gap-2 md:gap-4">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-white hover:text-netflix-red transition"
+            className="flex items-center gap-1 md:gap-2 text-white hover:text-netflix-red transition active:scale-95"
           >
-            <svg className="w-6 h-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M15 19l-7-7 7-7" />
             </svg>
-            <span>Back</span>
+            <span className="text-sm md:text-base">Back</span>
           </button>
           {loading ? (
-            <div className="h-8 w-64 bg-gray-700 animate-pulse rounded"></div>
+            <div className="h-6 md:h-8 w-32 md:w-64 bg-gray-700 animate-pulse rounded"></div>
           ) : (
-            <h1 className="text-2xl md:text-3xl font-bold text-white">{contentTitle}</h1>
+            <h1 className="text-lg md:text-2xl lg:text-3xl font-bold text-white truncate">{contentTitle}</h1>
           )}
         </div>
 
@@ -80,7 +81,7 @@ const Watch = () => {
           episode={episode}
         />
 
-        <div className="mt-8 text-center text-gray-400 text-sm">
+        <div className="mt-6 md:mt-8 text-center text-gray-400 text-xs md:text-sm px-4">
           <p>Tip: Your watch position is automatically saved every 10 seconds</p>
         </div>
       </div>
