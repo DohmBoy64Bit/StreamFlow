@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import MobileNav from '../components/MobileNav';
-import Spinner from '../components/Spinner';
-import ErrorMessage from '../components/ErrorMessage';
 import { getUserLists, createList, deleteList } from '../services/lists';
 
 const Lists = () => {
@@ -107,7 +105,7 @@ const Lists = () => {
 
         {lists.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-400 text-xl mb-4">You haven't created any lists yet</p>
+            <p className="text-gray-400 text-xl mb-4">You haven&apos;t created any lists yet</p>
             <button
               onClick={() => setShowCreateModal(true)}
               className="btn-primary px-6 py-3"

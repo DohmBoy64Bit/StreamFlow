@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
-import Spinner from '../components/Spinner';
 import { getMovieDetails } from '../services/movies';
 import { getTVDetails, getSeasonDetails } from '../services/tv';
 

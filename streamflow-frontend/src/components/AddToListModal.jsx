@@ -155,7 +155,7 @@ const AddToListModal = ({ isOpen, onClose, tmdbId, mediaType }) => {
             <>
               {lists.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-400 mb-4">You don't have any lists yet</p>
+                  <p className="text-gray-400 mb-4">You don&apos;t have any lists yet</p>
                   <button
                     onClick={() => setShowCreateForm(true)}
                     className="btn-primary px-6 py-3"

@@ -4,8 +4,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import MobileNav from '../components/MobileNav';
 import MovieCard from '../components/MovieCard';
-import Spinner from '../components/Spinner';
-import ErrorMessage from '../components/ErrorMessage';
 import { getListDetails, removeItemFromList } from '../services/lists';
 import { getMovieDetails } from '../services/movies';
 import { getTVDetails } from '../services/tv';
