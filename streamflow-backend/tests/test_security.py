@@ -2,9 +2,13 @@ import os
 
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 
-import pytest
 
-from app.utils.security import create_access_token, decode_access_token, hash_password, verify_password
+from app.utils.security import (
+    create_access_token,
+    decode_access_token,
+    hash_password,
+    verify_password,
+)
 
 
 def test_hash_password():

@@ -130,7 +130,9 @@ def mock_season_details():
 
 @pytest.mark.asyncio
 async def test_get_trending_tv(mock_tv_list_response):
-    with patch("app.services.tv_service.tmdb_client.get_trending", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.tv_service.tmdb_client.get_trending", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = mock_tv_list_response
         response = client.get("/api/v1/tv/trending")
         assert response.status_code == 200
@@ -142,7 +144,9 @@ async def test_get_trending_tv(mock_tv_list_response):
 
 @pytest.mark.asyncio
 async def test_get_trending_tv_with_pagination(mock_tv_list_response):
-    with patch("app.services.tv_service.tmdb_client.get_trending", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.tv_service.tmdb_client.get_trending", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = mock_tv_list_response
         response = client.get("/api/v1/tv/trending?page=2")
         assert response.status_code == 200
@@ -151,7 +155,9 @@ async def test_get_trending_tv_with_pagination(mock_tv_list_response):
 
 @pytest.mark.asyncio
 async def test_get_popular_tv(mock_tv_list_response):
-    with patch("app.services.tv_service.tmdb_client.get_popular_tv", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.tv_service.tmdb_client.get_popular_tv", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = mock_tv_list_response
         response = client.get("/api/v1/tv/popular")
         assert response.status_code == 200
@@ -162,7 +168,9 @@ async def test_get_popular_tv(mock_tv_list_response):
 
 @pytest.mark.asyncio
 async def test_get_tv_details(mock_tv_details):
-    with patch("app.services.tv_service.tmdb_client.get_tv_details", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.tv_service.tmdb_client.get_tv_details", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = mock_tv_details
         response = client.get("/api/v1/tv/1396")
         assert response.status_code == 200
@@ -211,7 +219,9 @@ async def test_search_tv():
         "total_results": 1,
     }
 
-    with patch("app.services.tv_service.tmdb_client.search_multi", new_callable=AsyncMock) as mock_search:
+    with patch(
+        "app.services.tv_service.tmdb_client.search_multi", new_callable=AsyncMock
+    ) as mock_search:
         mock_search.return_value = mock_search_result
         response = client.get("/api/v1/tv/search?query=breaking+bad")
         assert response.status_code == 200
@@ -230,7 +240,9 @@ async def test_search_tv_with_filters():
         "total_results": 0,
     }
 
-    with patch("app.services.tv_service.tmdb_client.search_multi", new_callable=AsyncMock) as mock_search:
+    with patch(
+        "app.services.tv_service.tmdb_client.search_multi", new_callable=AsyncMock
+    ) as mock_search:
         mock_search.return_value = mock_search_result
         response = client.get("/api/v1/tv/search?query=drama&genre=18&year=2020")
         assert response.status_code == 200
@@ -255,7 +267,9 @@ async def test_pagination_validation():
     response = client.get("/api/v1/tv/trending?page=1001")
     assert response.status_code == 422
 
-    with patch("app.services.tv_service.tmdb_client.get_trending", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.tv_service.tmdb_client.get_trending", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = TVListResponse(page=1, results=[], total_pages=0, total_results=0)
         response = client.get("/api/v1/tv/trending?page=1")
         assert response.status_code == 200

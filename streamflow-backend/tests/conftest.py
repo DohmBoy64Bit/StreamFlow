@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+import app.models.db_models  # noqa: F401 - Import models to register with SQLAlchemy metadata
 from app.core.database import Base
-from app.models.db_models import *
 
 
 @pytest.fixture(scope="session", autouse=True)

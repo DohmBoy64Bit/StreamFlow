@@ -23,7 +23,12 @@ def record_watch_position(
 
 
 def get_resume_position(
-    db: Session, user_id: uuid.UUID, tmdb_id: int, media_type: str, season: int = 0, episode: int = 0
+    db: Session,
+    user_id: uuid.UUID,
+    tmdb_id: int,
+    media_type: str,
+    season: int = 0,
+    episode: int = 0,
 ) -> int:
     watch_entry = get_watch_position(db, user_id, tmdb_id, media_type, season, episode)
     return watch_entry.last_position if watch_entry else 0

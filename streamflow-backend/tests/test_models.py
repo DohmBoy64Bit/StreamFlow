@@ -42,27 +42,17 @@ class TestUserModel:
         db_session.commit()
 
         # Test recovery codes relationship
-        recovery_code = RecoveryCode(
-            user_id=user.id,
-            code_hash="hashed_code",
-            used=False
-        )
+        recovery_code = RecoveryCode(user_id=user.id, code_hash="hashed_code", used=False)
         db_session.add(recovery_code)
 
         # Test watch history relationship
         watch_history = WatchHistory(
-            user_id=user.id,
-            tmdb_id=123,
-            media_type="movie",
-            last_position=0
+            user_id=user.id, tmdb_id=123, media_type="movie", last_position=0
         )
         db_session.add(watch_history)
 
         # Test lists relationship
-        list_obj = List(
-            user_id=user.id,
-            name="My Favorites"
-        )
+        list_obj = List(user_id=user.id, name="My Favorites")
         db_session.add(list_obj)
         db_session.commit()
 
@@ -85,11 +75,7 @@ class TestRecoveryCodeModel:
         db_session.add(user)
         db_session.commit()
 
-        recovery_code = RecoveryCode(
-            user_id=user.id,
-            code_hash="hashed_code",
-            used=False
-        )
+        recovery_code = RecoveryCode(user_id=user.id, code_hash="hashed_code", used=False)
         db_session.add(recovery_code)
         db_session.commit()
 
@@ -105,11 +91,7 @@ class TestRecoveryCodeModel:
         db_session.add(user)
         db_session.commit()
 
-        recovery_code = RecoveryCode(
-            user_id=user.id,
-            code_hash="hashed_code",
-            used=False
-        )
+        recovery_code = RecoveryCode(user_id=user.id, code_hash="hashed_code", used=False)
         db_session.add(recovery_code)
         db_session.commit()
 
@@ -132,7 +114,7 @@ class TestWatchHistoryModel:
             user_id=user.id,
             tmdb_id=123,
             media_type="movie",
-            last_position=1200  # 20 minutes
+            last_position=1200,  # 20 minutes
         )
         db_session.add(watch_history)
         db_session.commit()
@@ -158,7 +140,7 @@ class TestWatchHistoryModel:
             media_type="episode",
             season_number=1,
             episode_number=5,
-            last_position=1800
+            last_position=1800,
         )
         db_session.add(watch_history)
         db_session.commit()
@@ -177,7 +159,7 @@ class TestWatchHistoryModel:
             user_id=user.id,
             tmdb_id=123,
             media_type="invalid",  # Should be movie, tv, or episode
-            last_position=0
+            last_position=0,
         )
         db_session.add(watch_history)
 
@@ -191,23 +173,13 @@ class TestWatchHistoryModel:
         db_session.commit()
 
         # Create first watch history entry
-        wh1 = WatchHistory(
-            user_id=user.id,
-            tmdb_id=123,
-            media_type="movie",
-            last_position=1000
-        )
+        wh1 = WatchHistory(user_id=user.id, tmdb_id=123, media_type="movie", last_position=1000)
         # season_number and episode_number default to 0
         db_session.add(wh1)
         db_session.commit()
 
         # Try to create duplicate
-        wh2 = WatchHistory(
-            user_id=user.id,
-            tmdb_id=123,
-            media_type="movie",
-            last_position=2000
-        )
+        wh2 = WatchHistory(user_id=user.id, tmdb_id=123, media_type="movie", last_position=2000)
         db_session.add(wh2)
 
         with pytest.raises(IntegrityError):
@@ -220,10 +192,7 @@ class TestWatchHistoryModel:
         db_session.commit()
 
         watch_history = WatchHistory(
-            user_id=user.id,
-            tmdb_id=123,
-            media_type="movie",
-            last_position=1000
+            user_id=user.id, tmdb_id=123, media_type="movie", last_position=1000
         )
         db_session.add(watch_history)
         db_session.commit()
@@ -243,10 +212,7 @@ class TestListModel:
         db_session.add(user)
         db_session.commit()
 
-        list_obj = List(
-            user_id=user.id,
-            name="My Favorites"
-        )
+        list_obj = List(user_id=user.id, name="My Favorites")
         db_session.add(list_obj)
         db_session.commit()
 
@@ -285,11 +251,7 @@ class TestListItemModel:
         db_session.add(list_obj)
         db_session.commit()
 
-        list_item = ListItem(
-            list_id=list_obj.id,
-            tmdb_id=789,
-            media_type="movie"
-        )
+        list_item = ListItem(list_id=list_obj.id, tmdb_id=789, media_type="movie")
         db_session.add(list_item)
         db_session.commit()
 
@@ -312,7 +274,7 @@ class TestListItemModel:
         list_item = ListItem(
             list_id=list_obj.id,
             tmdb_id=789,
-            media_type="episode"  # Should be movie or tv
+            media_type="episode",  # Should be movie or tv
         )
         db_session.add(list_item)
 
@@ -330,20 +292,12 @@ class TestListItemModel:
         db_session.commit()
 
         # Create first item
-        item1 = ListItem(
-            list_id=list_obj.id,
-            tmdb_id=123,
-            media_type="movie"
-        )
+        item1 = ListItem(list_id=list_obj.id, tmdb_id=123, media_type="movie")
         db_session.add(item1)
         db_session.commit()
 
         # Try to create duplicate
-        item2 = ListItem(
-            list_id=list_obj.id,
-            tmdb_id=123,
-            media_type="movie"
-        )
+        item2 = ListItem(list_id=list_obj.id, tmdb_id=123, media_type="movie")
         db_session.add(item2)
 
         with pytest.raises(IntegrityError):
@@ -359,11 +313,7 @@ class TestListItemModel:
         db_session.add(list_obj)
         db_session.commit()
 
-        list_item = ListItem(
-            list_id=list_obj.id,
-            tmdb_id=123,
-            media_type="movie"
-        )
+        list_item = ListItem(list_id=list_obj.id, tmdb_id=123, media_type="movie")
         db_session.add(list_item)
         db_session.commit()
 
@@ -384,11 +334,7 @@ class TestListItemModel:
         db_session.add(list_obj)
         db_session.commit()
 
-        list_item = ListItem(
-            list_id=list_obj.id,
-            tmdb_id=123,
-            media_type="movie"
-        )
+        list_item = ListItem(list_id=list_obj.id, tmdb_id=123, media_type="movie")
         db_session.add(list_item)
         db_session.commit()
 

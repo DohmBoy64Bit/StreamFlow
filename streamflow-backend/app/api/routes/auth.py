@@ -16,8 +16,6 @@ from app.schemas.auth import (
     UserResponse,
 )
 from app.services.auth_service import (
-    InvalidCredentialsError,
-    InvalidRecoveryCodeError,
     UserAlreadyExistsError,
     authenticate_user,
     recover_password,
@@ -31,9 +29,7 @@ router = APIRouter()
 @router.post("/register", response_model=UserRegisterResponse)
 @limiter.limit("3/hour")
 async def register(
-    request: Request,
-    user_request: UserRegisterRequest,
-    db: Annotated[Session, Depends(get_db)]
+    request: Request, user_request: UserRegisterRequest, db: Annotated[Session, Depends(get_db)]
 ) -> UserRegisterResponse:
     """Register a new user account."""
     try:
@@ -54,19 +50,17 @@ async def register(
 @router.post("/login", response_model=TokenResponse)
 @limiter.limit("5/15minutes")
 async def login(
-    request: Request,
-    user_request: UserLoginRequest,
-    db: Annotated[Session, Depends(get_db)]
+    request: Request, user_request: UserLoginRequest, db: Annotated[Session, Depends(get_db)]
 ) -> TokenResponse:
     """Authenticate a user and return an access token."""
-    try:
-        user = authenticate_user(db, user_request.username, user_request.password)
+    user = authenticate_user(db, user_request.username, user_request.password)
 
-        access_token = create_access_token(data={"sub": str(user.id), "username": user.username})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid username or password")
 
-        return TokenResponse(access_token=access_token)
-    except InvalidCredentialsError as e:
-        raise HTTPException(status_code=401, detail=str(e))
+    access_token = create_access_token(data={"sub": str(user.id), "username": user.username})
+
+    return TokenResponse(access_token=access_token)
 
 
 @router.post("/recover-password")
@@ -74,21 +68,22 @@ async def login(
 async def recover_password_endpoint(
     request: Request,
     recovery_request: PasswordRecoveryRequest,
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ):
     """Recover password using a recovery code."""
-    try:
-        recover_password(db, recovery_request.username, recovery_request.recovery_code, recovery_request.new_password)
-        return {"message": "Password successfully updated"}
-    except InvalidRecoveryCodeError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception:
-        raise HTTPException(status_code=400, detail="Password recovery failed")
+    success = recover_password(
+        db, recovery_request.username, recovery_request.recovery_code, recovery_request.new_password
+    )
+
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid or already used recovery code")
+
+    return {"message": "Password successfully updated"}
 
 
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(
-    current_user: Annotated[User, Depends(get_current_user)]
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> UserResponse:
     """Get current authenticated user information."""
     return UserResponse(

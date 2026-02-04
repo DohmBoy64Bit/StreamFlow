@@ -1,8 +1,9 @@
-import pytest
 from unittest.mock import AsyncMock, patch
-import httpx
-from app.integrations.tmdb_client import TMDBClient
+
+import pytest
+
 from app.core.exceptions import ExternalAPIError
+from app.integrations.tmdb_client import TMDBClient
 
 
 @pytest.fixture
@@ -188,7 +189,7 @@ async def test_get_trending_movies(tmdb_client, mock_movie_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_movie_list_response
         result = await tmdb_client.get_trending("movie", "week", 1)
-        
+
         assert result.page == 1
         assert len(result.results) == 1
         assert result.results[0].title == "Fight Club"
@@ -200,7 +201,7 @@ async def test_get_trending_tv(tmdb_client, mock_tv_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_tv_list_response
         result = await tmdb_client.get_trending("tv", "week", 1)
-        
+
         assert result.page == 1
         assert len(result.results) == 1
         assert result.results[0].name == "Breaking Bad"
@@ -211,7 +212,7 @@ async def test_get_popular_movies(tmdb_client, mock_movie_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_movie_list_response
         result = await tmdb_client.get_popular_movies(1)
-        
+
         assert result.page == 1
         assert len(result.results) == 1
         assert result.results[0].title == "Fight Club"
@@ -223,7 +224,7 @@ async def test_get_top_rated_movies(tmdb_client, mock_movie_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_movie_list_response
         result = await tmdb_client.get_top_rated_movies(1)
-        
+
         assert result.page == 1
         assert len(result.results) == 1
         mock_request.assert_called_once_with("/movie/top_rated", {"page": 1})
@@ -234,7 +235,7 @@ async def test_get_popular_tv(tmdb_client, mock_tv_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_tv_list_response
         result = await tmdb_client.get_popular_tv(1)
-        
+
         assert result.page == 1
         assert len(result.results) == 1
         assert result.results[0].name == "Breaking Bad"
@@ -246,7 +247,7 @@ async def test_get_movie_details(tmdb_client, mock_movie_details_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_movie_details_response
         result = await tmdb_client.get_movie_details(550)
-        
+
         assert result.id == 550
         assert result.title == "Fight Club"
         assert result.runtime == 139
@@ -262,7 +263,7 @@ async def test_get_tv_details(tmdb_client, mock_tv_details_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_tv_details_response
         result = await tmdb_client.get_tv_details(1396)
-        
+
         assert result.id == 1396
         assert result.name == "Breaking Bad"
         assert result.number_of_seasons == 5
@@ -278,7 +279,7 @@ async def test_get_season_details(tmdb_client, mock_season_details_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_season_details_response
         result = await tmdb_client.get_season_details(1396, 1)
-        
+
         assert result.id == 3572
         assert result.name == "Season 1"
         assert result.season_number == 1
@@ -292,17 +293,15 @@ async def test_get_season_details(tmdb_client, mock_season_details_response):
 async def test_search_multi(tmdb_client):
     mock_response = {
         "page": 1,
-        "results": [
-            {"id": 550, "media_type": "movie", "title": "Fight Club"}
-        ],
+        "results": [{"id": 550, "media_type": "movie", "title": "Fight Club"}],
         "total_pages": 1,
         "total_results": 1,
     }
-    
+
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_response
         result = await tmdb_client.search_multi("Fight Club", page=1)
-        
+
         assert result["page"] == 1
         assert len(result["results"]) == 1
         mock_request.assert_called_once_with("/search/multi", {"query": "Fight Club", "page": 1})
@@ -311,12 +310,12 @@ async def test_search_multi(tmdb_client):
 @pytest.mark.asyncio
 async def test_search_multi_with_filters(tmdb_client):
     mock_response = {"page": 1, "results": [], "total_pages": 1, "total_results": 0}
-    
+
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_response
         filters = {"year": 1999, "with_genres": "18"}
         result = await tmdb_client.search_multi("Fight", page=1, filters=filters)
-        
+
         assert result["page"] == 1
         mock_request.assert_called_once_with(
             "/search/multi", {"query": "Fight", "page": 1, "year": 1999, "with_genres": "18"}
@@ -328,7 +327,7 @@ async def test_get_genres(tmdb_client, mock_genre_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_genre_list_response
         result = await tmdb_client.get_genres("movie")
-        
+
         assert len(result.genres) == 2
         assert result.genres[0].name == "Drama"
         assert result.genres[1].name == "Crime"
@@ -339,10 +338,10 @@ async def test_get_genres(tmdb_client, mock_genre_list_response):
 async def test_caching_works(tmdb_client, mock_movie_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_movie_list_response
-        
+
         result1 = await tmdb_client.get_popular_movies(1)
         result2 = await tmdb_client.get_popular_movies(1)
-        
+
         assert result1.results[0].title == result2.results[0].title
         mock_request.assert_called_once()
 
@@ -351,10 +350,10 @@ async def test_caching_works(tmdb_client, mock_movie_list_response):
 async def test_api_error_handling(tmdb_client):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.side_effect = ExternalAPIError("TMDB API error: 404 - Not Found")
-        
+
         with pytest.raises(ExternalAPIError) as exc_info:
             await tmdb_client.get_movie_details(999999)
-        
+
         assert "TMDB API error: 404" in str(exc_info.value)
 
 
@@ -362,10 +361,10 @@ async def test_api_error_handling(tmdb_client):
 async def test_network_error_handling(tmdb_client):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.side_effect = ExternalAPIError("TMDB API request failed: Connection failed")
-        
+
         with pytest.raises(ExternalAPIError) as exc_info:
             await tmdb_client.get_popular_movies()
-        
+
         assert "TMDB API request failed" in str(exc_info.value)
 
 
@@ -373,12 +372,12 @@ async def test_network_error_handling(tmdb_client):
 async def test_cache_expiration(tmdb_client, mock_movie_list_response):
     with patch.object(tmdb_client, "_make_request", new_callable=AsyncMock) as mock_request:
         mock_request.return_value = mock_movie_list_response
-        
-        result1 = await tmdb_client.get_popular_movies(1)
-        
+
+        _result1 = await tmdb_client.get_popular_movies(1)
+
         cache_key = "popular_movies_1"
         tmdb_client.cache[cache_key].expires_at = 0
-        
-        result2 = await tmdb_client.get_popular_movies(1)
-        
+
+        _result2 = await tmdb_client.get_popular_movies(1)
+
         assert mock_request.call_count == 2

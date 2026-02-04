@@ -10,21 +10,21 @@ router = APIRouter()
 
 @router.get("/trending", response_model=MovieListResponse)
 async def get_trending_movies(
-    page: int = Query(1, ge=1, le=1000, description="Page number")
+    page: int = Query(1, ge=1, le=1000, description="Page number"),
 ) -> MovieListResponse:
     return await movie_service.get_trending_movies(page=page)
 
 
 @router.get("/popular", response_model=MovieListResponse)
 async def get_popular_movies(
-    page: int = Query(1, ge=1, le=1000, description="Page number")
+    page: int = Query(1, ge=1, le=1000, description="Page number"),
 ) -> MovieListResponse:
     return await movie_service.get_popular_movies(page=page)
 
 
 @router.get("/top-rated", response_model=MovieListResponse)
 async def get_top_rated_movies(
-    page: int = Query(1, ge=1, le=1000, description="Page number")
+    page: int = Query(1, ge=1, le=1000, description="Page number"),
 ) -> MovieListResponse:
     return await movie_service.get_top_rated_movies(page=page)
 

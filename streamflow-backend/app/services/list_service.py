@@ -9,16 +9,19 @@ from app.repositories import list_repo
 
 class ListNotFoundError(Exception):
     """Raised when a list is not found or user doesn't have access."""
+
     pass
 
 
 class ItemAlreadyInListError(Exception):
     """Raised when attempting to add an item that's already in the list."""
+
     pass
 
 
 class ItemNotFoundError(Exception):
     """Raised when attempting to remove an item that doesn't exist."""
+
     pass
 
 
@@ -43,7 +46,9 @@ def delete_list(db: Session, list_id: uuid.UUID, user_id: uuid.UUID) -> None:
         raise ListNotFoundError(f"List with id {list_id} not found or access denied")
 
 
-def add_item_to_list(db: Session, list_id: uuid.UUID, user_id: uuid.UUID, tmdb_id: int, media_type: str) -> ListItem:
+def add_item_to_list(
+    db: Session, list_id: uuid.UUID, user_id: uuid.UUID, tmdb_id: int, media_type: str
+) -> ListItem:
     list_obj = get_list_by_id(db, list_id, user_id)
 
     try:
@@ -53,7 +58,9 @@ def add_item_to_list(db: Session, list_id: uuid.UUID, user_id: uuid.UUID, tmdb_i
         raise ItemAlreadyInListError(f"Item {tmdb_id} ({media_type}) is already in this list")
 
 
-def remove_item_from_list(db: Session, list_id: uuid.UUID, item_id: uuid.UUID, user_id: uuid.UUID) -> None:
+def remove_item_from_list(
+    db: Session, list_id: uuid.UUID, item_id: uuid.UUID, user_id: uuid.UUID
+) -> None:
     get_list_by_id(db, list_id, user_id)
 
     deleted = list_repo.remove_item_from_list(db, list_id, item_id)

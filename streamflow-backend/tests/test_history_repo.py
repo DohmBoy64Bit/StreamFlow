@@ -1,5 +1,3 @@
-import uuid
-
 import pytest
 
 from app.repositories.history_repo import (

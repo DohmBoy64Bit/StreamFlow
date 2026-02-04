@@ -42,7 +42,9 @@ class TMDBClient:
     def _set_cache(self, key: str, data: Any, ttl: int):
         self.cache[key] = CacheEntry(data, ttl)
 
-    async def _make_request(self, endpoint: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def _make_request(
+        self, endpoint: str, params: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         try:
             request_params = params.copy() if params else {}
             request_params["api_key"] = self.api_key
@@ -168,9 +170,7 @@ class TMDBClient:
         if cached:
             return cached  # type: ignore[no-any-return]
 
-        data = await self._make_request(
-            f"/tv/{tmdb_id}", {"append_to_response": "credits,videos"}
-        )
+        data = await self._make_request(f"/tv/{tmdb_id}", {"append_to_response": "credits,videos"})
 
         cast = []
         if "credits" in data and "cast" in data["credits"]:

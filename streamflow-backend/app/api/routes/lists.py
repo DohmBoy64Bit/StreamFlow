@@ -33,7 +33,7 @@ router = APIRouter()
 async def create_new_list(
     list_request: CreateListRequest,
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> ListResponse:
     """Create a new list for the authenticated user."""
     list_obj = create_list(db, current_user.id, list_request.name)
@@ -49,7 +49,7 @@ async def create_new_list(
 @router.get("", response_model=list[ListResponse])
 async def get_lists(
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> list[ListResponse]:
     """Get all lists for the authenticated user."""
     lists = get_user_lists(db, current_user.id)
@@ -69,11 +69,12 @@ async def get_lists(
 async def get_list(
     list_id: str,
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> ListWithItemsResponse:
     """Get a specific list with its items."""
     try:
         from uuid import UUID
+
         list_uuid = UUID(list_id)
 
         list_obj = get_list_by_id(db, list_uuid, current_user.id)
@@ -92,7 +93,7 @@ async def get_list(
                     added_at=item.added_at.isoformat(),
                 )
                 for item in items
-            ]
+            ],
         )
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid list ID format")
@@ -104,11 +105,12 @@ async def get_list(
 async def delete_list_endpoint(
     list_id: str,
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ):
     """Delete a list."""
     try:
         from uuid import UUID
+
         list_uuid = UUID(list_id)
 
         delete_list(db, list_uuid, current_user.id)
@@ -123,19 +125,16 @@ async def add_item(
     list_id: str,
     item_request: AddItemRequest,
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> ListItemResponse:
     """Add an item to a list."""
     try:
         from uuid import UUID
+
         list_uuid = UUID(list_id)
 
         item = add_item_to_list(
-            db,
-            list_uuid,
-            current_user.id,
-            item_request.tmdb_id,
-            item_request.media_type
+            db, list_uuid, current_user.id, item_request.tmdb_id, item_request.media_type
         )
 
         return ListItemResponse(
@@ -157,11 +156,12 @@ async def remove_item(
     list_id: str,
     item_id: str,
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ):
     """Remove an item from a list."""
     try:
         from uuid import UUID
+
         list_uuid = UUID(list_id)
         item_uuid = UUID(item_id)
 

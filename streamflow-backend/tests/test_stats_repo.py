@@ -1,6 +1,3 @@
-import uuid
-from datetime import datetime, timedelta
-
 import pytest
 
 from app.repositories.history_repo import save_watch_position

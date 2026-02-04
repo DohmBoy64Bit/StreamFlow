@@ -1,5 +1,3 @@
-import pytest
-
 from app.utils.codes import generate_recovery_codes, hash_code, verify_code
 
 

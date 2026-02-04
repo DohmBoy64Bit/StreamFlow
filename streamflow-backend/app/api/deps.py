@@ -15,7 +15,7 @@ security = HTTPBearer()
 
 def get_current_user(
     credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> User:
     token = credentials.credentials
 

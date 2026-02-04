@@ -10,14 +10,14 @@ router = APIRouter()
 
 @router.get("/trending", response_model=TVListResponse)
 async def get_trending_tv(
-    page: int = Query(1, ge=1, le=1000, description="Page number")
+    page: int = Query(1, ge=1, le=1000, description="Page number"),
 ) -> TVListResponse:
     return await tv_service.get_trending_tv(page=page)
 
 
 @router.get("/popular", response_model=TVListResponse)
 async def get_popular_tv(
-    page: int = Query(1, ge=1, le=1000, description="Page number")
+    page: int = Query(1, ge=1, le=1000, description="Page number"),
 ) -> TVListResponse:
     return await tv_service.get_popular_tv(page=page)
 

@@ -79,7 +79,9 @@ def mock_movie_details():
 
 @pytest.mark.asyncio
 async def test_get_trending_movies(mock_movie_list_response):
-    with patch("app.services.movie_service.tmdb_client.get_trending", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.movie_service.tmdb_client.get_trending", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = mock_movie_list_response
         response = client.get("/api/v1/movies/trending")
         assert response.status_code == 200
@@ -91,7 +93,9 @@ async def test_get_trending_movies(mock_movie_list_response):
 
 @pytest.mark.asyncio
 async def test_get_trending_movies_with_pagination(mock_movie_list_response):
-    with patch("app.services.movie_service.tmdb_client.get_trending", new_callable=AsyncMock) as mock_get:
+    with patch(
+        "app.services.movie_service.tmdb_client.get_trending", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = mock_movie_list_response
         response = client.get("/api/v1/movies/trending?page=2")
         assert response.status_code == 200
@@ -159,7 +163,9 @@ async def test_search_movies():
         "total_results": 1,
     }
 
-    with patch("app.services.movie_service.tmdb_client.search_multi", new_callable=AsyncMock) as mock_search:
+    with patch(
+        "app.services.movie_service.tmdb_client.search_multi", new_callable=AsyncMock
+    ) as mock_search:
         mock_search.return_value = mock_search_result
         response = client.get("/api/v1/movies/search?query=fight+club")
         assert response.status_code == 200
@@ -178,7 +184,9 @@ async def test_search_movies_with_filters():
         "total_results": 0,
     }
 
-    with patch("app.services.movie_service.tmdb_client.search_multi", new_callable=AsyncMock) as mock_search:
+    with patch(
+        "app.services.movie_service.tmdb_client.search_multi", new_callable=AsyncMock
+    ) as mock_search:
         mock_search.return_value = mock_search_result
         response = client.get("/api/v1/movies/search?query=action&genre=28&year=2020")
         assert response.status_code == 200
@@ -203,7 +211,11 @@ async def test_pagination_validation():
     response = client.get("/api/v1/movies/trending?page=1001")
     assert response.status_code == 422
 
-    with patch("app.services.movie_service.tmdb_client.get_trending", new_callable=AsyncMock) as mock_get:
-        mock_get.return_value = MovieListResponse(page=1, results=[], total_pages=0, total_results=0)
+    with patch(
+        "app.services.movie_service.tmdb_client.get_trending", new_callable=AsyncMock
+    ) as mock_get:
+        mock_get.return_value = MovieListResponse(
+            page=1, results=[], total_pages=0, total_results=0
+        )
         response = client.get("/api/v1/movies/trending?page=1")
         assert response.status_code == 200

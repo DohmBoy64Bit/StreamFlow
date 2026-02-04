@@ -15,8 +15,10 @@ class NoOpLimiter:
 
     def limit(self, *args: Any, **kwargs: Any) -> Callable[[Callable], Callable]:
         """Return a no-op decorator."""
+
         def decorator(func: Callable) -> Callable:
             return func
+
         return decorator
 
 

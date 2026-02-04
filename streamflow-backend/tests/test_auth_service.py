@@ -2,7 +2,6 @@ import os
 
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 
-import pytest
 
 from app.services import auth_service
 
@@ -103,7 +102,9 @@ def test_recover_password_code_invalidated(db_session):
     result1 = auth_service.recover_password(db_session, username, recovery_codes[0], new_password)
     assert result1 is True
 
-    result2 = auth_service.recover_password(db_session, username, recovery_codes[0], "another_password")
+    result2 = auth_service.recover_password(
+        db_session, username, recovery_codes[0], "another_password"
+    )
     assert result2 is False
 
 

@@ -49,9 +49,7 @@ def test_get_tv_embed_url_structure():
     result = client.get_tv_embed_url(tmdb_id, season, episode)
 
     assert result["primary_url"].endswith(f"/tv/{tmdb_id}/{season}/{episode}")
-    assert all(
-        url.endswith(f"/tv/{tmdb_id}/{season}/{episode}") for url in result["fallback_urls"]
-    )
+    assert all(url.endswith(f"/tv/{tmdb_id}/{season}/{episode}") for url in result["fallback_urls"])
 
 
 def test_fallback_urls_are_different_from_primary():

@@ -40,7 +40,9 @@ class RecoveryCode(Base):
     __tablename__ = "recovery_codes"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     code_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     used: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
@@ -54,7 +56,9 @@ class WatchHistory(Base):
     __tablename__ = "watch_history"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     tmdb_id: Mapped[int] = mapped_column(Integer, nullable=False)
     media_type: Mapped[str] = mapped_column(String(20), nullable=False)
     season_number: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
@@ -86,7 +90,9 @@ class List(Base):
     __tablename__ = "lists"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(
@@ -94,7 +100,9 @@ class List(Base):
     )
 
     user: Mapped["User"] = relationship(back_populates="lists")
-    items: Mapped[list["ListItem"]] = relationship(back_populates="list", cascade="all, delete-orphan")
+    items: Mapped[list["ListItem"]] = relationship(
+        back_populates="list", cascade="all, delete-orphan"
+    )
 
     __table_args__ = (Index("idx_lists_user_id", "user_id"),)
 
@@ -103,7 +111,9 @@ class ListItem(Base):
     __tablename__ = "list_items"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    list_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("lists.id", ondelete="CASCADE"), nullable=False)
+    list_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("lists.id", ondelete="CASCADE"), nullable=False
+    )
     tmdb_id: Mapped[int] = mapped_column(Integer, nullable=False)
     media_type: Mapped[str] = mapped_column(String(20), nullable=False)
     added_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)

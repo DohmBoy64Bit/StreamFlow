@@ -164,9 +164,27 @@ def test_get_watch_history_authenticated():
     token = login_user(username)
 
     watch_data = [
-        {"tmdb_id": 550, "media_type": "movie", "position": 120, "season_number": 0, "episode_number": 0},
-        {"tmdb_id": 1396, "media_type": "tv", "position": 300, "season_number": 1, "episode_number": 1},
-        {"tmdb_id": 1396, "media_type": "tv", "position": 150, "season_number": 1, "episode_number": 2},
+        {
+            "tmdb_id": 550,
+            "media_type": "movie",
+            "position": 120,
+            "season_number": 0,
+            "episode_number": 0,
+        },
+        {
+            "tmdb_id": 1396,
+            "media_type": "tv",
+            "position": 300,
+            "season_number": 1,
+            "episode_number": 1,
+        },
+        {
+            "tmdb_id": 1396,
+            "media_type": "tv",
+            "position": 150,
+            "season_number": 1,
+            "episode_number": 2,
+        },
     ]
 
     for data in watch_data:
