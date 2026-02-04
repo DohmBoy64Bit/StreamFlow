@@ -54,7 +54,8 @@ const Carousel = ({ title, items, onItemClick }) => {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 md:px-0 pb-4 touch-pan-x cursor-grab select-none"
+        className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-4 md:px-0 pb-4 touch-pan-x cursor-grab select-none"
+        style={{ scrollBehavior: isDragging ? 'auto' : 'smooth' }}
       >
         {items.map((item) => (
           <div key={item.id} className="snap-start flex-shrink-0">
