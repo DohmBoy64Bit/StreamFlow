@@ -71,12 +71,15 @@ const Carousel = ({ title, items, onItemClick }) => {
             <h2 className="text-lg md:text-xl font-black text-white tracking-tight uppercase leading-none">
               {title.split(' ')[0]} <span className="text-gray-500 font-medium">{title.split(' ').slice(1).join(' ')}</span>
             </h2>
-            <div className="h-4 w-px bg-white/10 hidden md:block" />
-            <div className="px-1.5 py-0 bg-streamflow-cyan/5 border border-streamflow-cyan/10 rounded-[1px] hidden md:block group-hover/carousel:border-streamflow-cyan/30 transition-colors">
-              <span className="text-[7.5px] font-bold text-streamflow-cyan uppercase tracking-[0.2em] leading-none">
+            {/* Pipe and SEQ-ID hidden as per request */}
+            {/* <div className="h-4 w-px bg-white/10 hidden md:block" />
+            <div className="flex items-center gap-1.5 leading-none hidden md:block">
+              <span className="text-white/20 text-[10px] font-black">[</span>
+              <span className="text-[9px] font-black text-streamflow-cyan uppercase tracking-[0.15em] leading-none drop-shadow-[0_0_3px_rgba(0,255,255,0.5)]">
                 SEQ-{sequenceId}
               </span>
-            </div>
+              <span className="text-white/20 text-[10px] font-black">]</span>
+            </div> */}
           </div>
         </div>
 
