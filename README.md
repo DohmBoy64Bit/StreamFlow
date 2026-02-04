@@ -111,6 +111,60 @@ cd streamflow-frontend
 npm run build
 ```
 
+## Docker Deployment
+
+Run StreamFlow in a single container with both frontend and backend:
+
+### Prerequisites
+- Docker or Podman installed
+- TMDB API key from https://www.themoviedb.org/settings/api
+
+### Build Image
+```bash
+docker build -t streamflow:latest .
+# or with Podman
+podman build -t streamflow:latest .
+```
+
+### Run Container
+```bash
+docker run -d -p 8000:8000 \
+  -e DATABASE_URL="sqlite:///./streamflow.db" \
+  -e SECRET_KEY="your-secret-key-here" \
+  -e TMDB_API_KEY="your-tmdb-api-key" \
+  -e VIDSRC_PRIMARY_DOMAIN="vidsrc.to" \
+  -e CORS_ORIGINS="http://localhost:8000" \
+  --name streamflow \
+  streamflow:latest
+```
+
+Or use the `.env` file:
+```bash
+docker run -d -p 8000:8000 \
+  --env-file streamflow-backend/.env \
+  --name streamflow \
+  streamflow:latest
+```
+
+Access the application at: **http://localhost:8000**
+
+### Container Management
+```bash
+# View logs
+docker logs -f streamflow
+
+# Stop container
+docker stop streamflow
+
+# Start container
+docker start streamflow
+
+# Remove container
+docker rm -f streamflow
+```
+
+For production deployment with PostgreSQL, see [DEPLOYMENT_COMBINED.md](DEPLOYMENT_COMBINED.md).
+
 ## API Documentation
 
 Once the backend is running, visit http://localhost:8000/docs for interactive API documentation.
