@@ -28,6 +28,40 @@ A Netflix-style streaming web application built with React and FastAPI, enabling
 - JWT Authentication
 - TMDB API Integration
 
+## Automated Setup (Windows)
+
+For a quick, automated setup on Windows, use the PowerShell setup script:
+
+### One-Command Setup
+
+```powershell
+# Run PowerShell as Administrator, then:
+irm https://raw.githubusercontent.com/DohmBoy64Bit/StreamFlow/new-task-ac30/setup-streamflow.ps1 | iex
+```
+
+**What it does:**
+- ✅ Installs Git, Node.js 24 LTS, and Python 3.12 (if missing)
+- ✅ Installs WSL2 (required for Podman)
+- ✅ Installs Podman (lightweight Docker alternative)
+- ✅ Optionally installs ngrok for public access
+- ✅ Clones the StreamFlow repository
+- ✅ Creates `.env` file with your TMDB API key
+- ✅ Builds and runs the Docker container
+- ✅ Opens the app in your browser
+
+**Requirements:**
+- Windows 10/11
+- PowerShell (run as Administrator)
+- TMDB API key from https://www.themoviedb.org/settings/api
+
+**Alternative - Local Script:**
+```powershell
+# Download and run the setup script
+git clone https://github.com/DohmBoy64Bit/StreamFlow.git
+cd StreamFlow
+.\setup-streamflow.ps1
+```
+
 ## Quick Start
 
 ### Prerequisites
