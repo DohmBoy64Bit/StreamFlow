@@ -163,6 +163,33 @@ docker start streamflow
 docker rm -f streamflow
 ```
 
+### Expose via ngrok (Public Access)
+
+To make your local instance accessible over the internet:
+
+1. **Start ngrok tunnel:**
+```bash
+ngrok http 8000
+```
+
+2. **Run container with ngrok CORS:**
+```bash
+docker run -d -p 8000:8000 \
+  --env-file streamflow-backend/.env \
+  -e CORS_ORIGINS=https://your-ngrok-url.ngrok-free.app \
+  --name streamflow \
+  streamflow:latest
+
+# Example with Podman
+podman run -d -p 8000:8000 \
+  --env-file streamflow-backend/.env \
+  -e CORS_ORIGINS=https://abc123.ngrok-free.app \
+  --name streamflow \
+  streamflow:latest
+```
+
+Replace `https://your-ngrok-url.ngrok-free.app` with your actual ngrok URL.
+
 For production deployment with PostgreSQL, see [DEPLOYMENT_COMBINED.md](DEPLOYMENT_COMBINED.md).
 
 ## API Documentation
