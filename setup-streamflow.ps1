@@ -9,6 +9,21 @@ if (-not ([Security.Principal.WindowsPrincipal] `
     Write-Host "[ERROR] Please run PowerShell as Administrator!" -ForegroundColor Red
     exit 1
 }
+
+# Helper function for downloads with progress
+function Download-File {
+    param([string]$Url, [string]$OutFile, [string]$Description)
+    Write-Host "[DOWNLOAD] $Description..." -ForegroundColor Yellow
+    try {
+        Invoke-WebRequest -Uri $Url -OutFile $OutFile -UseBasicParsing -ErrorAction Stop
+        Write-Host "[OK] Download complete: $(Split-Path $OutFile -Leaf)" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "[ERROR] Download failed: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+}
+
 Write-Host "[START] Starting setup..." -ForegroundColor Cyan
 
 # --------------------------- 
@@ -19,15 +34,34 @@ $gitPath = Get-Command git -ErrorAction SilentlyContinue
 if ($gitPath) {
     Write-Host "[OK] Git already installed: $($gitPath.Source)" -ForegroundColor Green
 } else {
-    Write-Host "[INSTALL] Git not found. Installing Git for Windows..." -ForegroundColor Yellow
-    $gitVersion = "2.53.0.windows.1"
-    $gitUrl = "https://github.com/git-for-windows/git/releases/download/v$gitVersion/Git-$gitVersion-64-bit.exe"
-    $gitInstaller = "$env:TEMP\Git-$gitVersion-64-bit.exe"
-    Invoke-WebRequest -Uri $gitUrl -OutFile $gitInstaller -UseBasicParsing
-    Start-Process -FilePath $gitInstaller -ArgumentList "/VERYSILENT", "/NORESTART", "/COMPONENTS=""icons,ext\reg\shellhere,assoc,assoc_sh""" -Wait
+    Write-Host "[INSTALL] Git not found. Installing Git for Windows 2.53.0..." -ForegroundColor Yellow
+    
+    $gitTag = "v2.53.0.windows.1"
+    $gitFile = "Git-2.53.0-64-bit.exe"
+    $gitUrl = "https://github.com/git-for-windows/git/releases/download/$gitTag/$gitFile"
+    $gitInstaller = "$env:TEMP\$gitFile"
+
+    Download-File -Url $gitUrl -OutFile $gitInstaller -Description "Git installer"
+
+    Write-Host "[INSTALL] Launching Git installer (watch the progress window)..." -ForegroundColor Yellow
+    try {
+        $process = Start-Process -FilePath $gitInstaller `
+            -ArgumentList "/SILENT", "/NORESTART", "/COMPONENTS=""icons,ext\reg\shellhere,assoc,assoc_sh""" `
+            -Wait -PassThru -ErrorAction Stop
+
+        if ($process.ExitCode -ne 0) {
+            Write-Host "[ERROR] Git installation failed (exit code: $($process.ExitCode))" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "[OK] Git installed successfully!" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "[ERROR] Git installation error: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+
     $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + `
                 [System.Environment]::GetEnvironmentVariable("PATH", "User")
-    Write-Host "[OK] Git installed successfully!" -ForegroundColor Green
 }
 
 # --------------------------- 
@@ -43,15 +77,32 @@ if ($nodePath) {
     $nodeVersion = "24.13.0"
     $nodeUrl = "https://nodejs.org/dist/v$nodeVersion/node-v$nodeVersion-x64.msi"
     $nodeInstaller = "$env:TEMP\node-v$nodeVersion-x64.msi"
-    Invoke-WebRequest -Uri $nodeUrl -OutFile $nodeInstaller -UseBasicParsing
-    Start-Process msiexec.exe -ArgumentList "/i", $nodeInstaller, "/quiet", "/norestart" -Wait
+
+    Download-File -Url $nodeUrl -OutFile $nodeInstaller -Description "Node.js installer"
+
+    Write-Host "[INSTALL] Launching Node.js installer (watch the progress window)..." -ForegroundColor Yellow
+    try {
+        $process = Start-Process msiexec.exe `
+            -ArgumentList "/i", $nodeInstaller, "/passive", "/norestart" `
+            -Wait -PassThru -ErrorAction Stop
+
+        if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
+            Write-Host "[ERROR] Node.js installation failed (exit code: $($process.ExitCode))" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "[OK] Node.js installed successfully!" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "[ERROR] Node.js installation error: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+
     $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + `
                 [System.Environment]::GetEnvironmentVariable("PATH", "User")
-    Write-Host "[OK] Node.js installed successfully!" -ForegroundColor Green
 }
 
 # --------------------------- 
-# 0.75 Auto-Install Python 3.12 if missing (required for backend)
+# 0.75 Auto-Install Python 3.12 if missing
 # ---------------------------
 Write-Host "[CHECK] Checking Python..." -ForegroundColor Yellow
 $pythonPath = Get-Command python -ErrorAction SilentlyContinue
@@ -59,39 +110,62 @@ if ($pythonPath) {
     $pyVer = & python --version
     Write-Host "[OK] Python already installed: $pyVer" -ForegroundColor Green
 } else {
-    Write-Host "[INSTALL] Python not found. Installing Python 3.12.9 (recommended for StreamFlow)..." -ForegroundColor Yellow
+    Write-Host "[INSTALL] Python not found. Installing Python 3.12.9..." -ForegroundColor Yellow
     $pyVersion = "3.12.9"
     $pyUrl = "https://www.python.org/ftp/python/$pyVersion/python-$pyVersion-amd64.exe"
     $pyInstaller = "$env:TEMP\python-$pyVersion-amd64.exe"
 
-    Invoke-WebRequest -Uri $pyUrl -OutFile $pyInstaller -UseBasicParsing
-    Start-Process -FilePath $pyInstaller -ArgumentList "/quiet", "InstallAllUsers=1", "PrependPath=1", "Include_test=0" -Wait
+    Download-File -Url $pyUrl -OutFile $pyInstaller -Description "Python installer"
 
-    # Refresh PATH
+    Write-Host "[INSTALL] Launching Python installer (watch the progress window)..." -ForegroundColor Yellow
+    try {
+        $process = Start-Process -FilePath $pyInstaller `
+            -ArgumentList "/passive", "InstallAllUsers=1", "PrependPath=1", "Include_test=0" `
+            -Wait -PassThru -ErrorAction Stop
+
+        if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
+            Write-Host "[ERROR] Python installation failed (exit code: $($process.ExitCode))" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "[OK] Python 3.12.9 installed successfully!" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "[ERROR] Python installation error: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+
     $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + `
                 [System.Environment]::GetEnvironmentVariable("PATH", "User")
-    Write-Host "[OK] Python 3.12.9 installed successfully!" -ForegroundColor Green
-    Write-Host "[NOTE] You may need to restart PowerShell for 'python' command to be recognized" -ForegroundColor Magenta
+    Write-Host "[NOTE] If 'python' command not found, restart PowerShell." -ForegroundColor Magenta
 }
 
 # --------------------------- 
 # 1. Check / Install WSL
 # ---------------------------
 Write-Host "[CHECK] Checking WSL status..." -ForegroundColor Yellow
-$wslStatus = wsl -l -v 2>$null
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "[OK] WSL is already installed." -ForegroundColor Green
-} else {
+try {
+    $wslStatus = wsl -l -v 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "[OK] WSL is already installed." -ForegroundColor Green
+    } else {
+        throw "WSL not detected"
+    }
+} catch {
     Write-Host "[INSTALL] Installing WSL..." -ForegroundColor Yellow
-    wsl --install --no-distribution
-    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-    wsl --set-default-version 2
-    Write-Host "[WARN] WSL installed. Reboot required." -ForegroundColor Magenta
-    $rebootNow = Read-Host "Reboot now? (yes/no)"
-    if ($rebootNow -match "^(y|yes)$") {
-        Restart-Computer -Force
-        exit 0
+    try {
+        wsl --install --no-distribution
+        dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+        dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+        wsl --set-default-version 2
+        Write-Host "[WARN] WSL installed. Reboot required." -ForegroundColor Magenta
+        $rebootNow = Read-Host "Reboot now? (yes/no)"
+        if ($rebootNow -match "^(y|yes)$") {
+            Restart-Computer -Force
+            exit 0
+        }
+    } catch {
+        Write-Host "[ERROR] WSL installation failed: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
     }
 }
 
@@ -106,18 +180,32 @@ if ($podmanPath) {
     Write-Host "[INSTALL] Installing Podman 5.7.1..." -ForegroundColor Yellow
     $podmanUrl = "https://github.com/containers/podman/releases/download/v5.7.1/podman-5.7.1-setup.exe"
     $installerPath = "$env:TEMP\podman-5.7.1-setup.exe"
-    Invoke-WebRequest -Uri $podmanUrl -OutFile $installerPath
-    Start-Process -FilePath $installerPath -ArgumentList "/quiet" -Wait
+    Download-File -Url $podmanUrl -OutFile $installerPath -Description "Podman installer"
+
+    Write-Host "[INSTALL] Launching Podman installer (watch the progress window)..." -ForegroundColor Yellow
+    try {
+        $process = Start-Process -FilePath $installerPath -ArgumentList "/SILENT" -Wait -PassThru -ErrorAction Stop
+        if ($process.ExitCode -ne 0) {
+            Write-Host "[ERROR] Podman installation failed (exit code: $($process.ExitCode))" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "[OK] Podman installed successfully!" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "[ERROR] Podman installation error: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+
     $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH","Machine") + ";" + `
                 [System.Environment]::GetEnvironmentVariable("PATH","User")
 }
+
 podman --version
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[ERROR] Podman verification failed." -ForegroundColor Red
     exit 1
 }
 
-# (The rest of the script remains exactly the same from ngrok check onward)
 # --------------------------- 
 # 3. Check / Offer ngrok
 # ---------------------------
@@ -132,7 +220,8 @@ if ($ngrokPath) {
         Write-Host "[INSTALL] Downloading ngrok..." -ForegroundColor Yellow
         $ngrokZip = "$env:TEMP\ngrok.zip"
         $ngrokUrl = "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip"
-        Invoke-WebRequest -Uri $ngrokUrl -OutFile $ngrokZip
+        Download-File -Url $ngrokUrl -OutFile $ngrokZip -Description "ngrok zip"
+
         $ngrokDir = "$env:USERPROFILE\ngrok"
         New-Item -ItemType Directory -Path $ngrokDir -Force | Out-Null
         Expand-Archive -Path $ngrokZip -DestinationPath $ngrokDir -Force
@@ -170,7 +259,9 @@ if (Test-Path $workdir) {
 }
 Write-Host "[OK] Working in: $(Get-Location)" -ForegroundColor Green
 
-# .env creation, Build, Run, Open browser sections (unchanged)
+# --------------------------- 
+# Create .env file if missing
+# ---------------------------
 $envPath = "streamflow-backend/.env"
 if (-not (Test-Path $envPath)) {
     $tmdbKey = Read-Host "Enter your TMDB API Key"
@@ -192,6 +283,9 @@ DEBUG=true
     Set-Content -Path $envPath -Value $envContent
 }
 
+# --------------------------- 
+# Build container image
+# ---------------------------
 Write-Host "[BUILD] Building container image..." -ForegroundColor Yellow
 if (Test-Path "Dockerfile") {
     podman build -t streamflow:latest .
@@ -202,6 +296,9 @@ if (Test-Path "Dockerfile") {
 
 podman rm -f streamflow 2>$null
 
+# --------------------------- 
+# Run container
+# ---------------------------
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Do you want to start with ngrok CORS?" -ForegroundColor Yellow
