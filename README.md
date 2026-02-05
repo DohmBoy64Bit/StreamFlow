@@ -59,6 +59,13 @@ irm https://raw.githubusercontent.com/DohmBoy64Bit/StreamFlow/new-task-ac30/setu
 - After restart, **run the script again** - it will skip already-installed components and continue setup
 - The script is idempotent - safe to run multiple times
 
+**Troubleshooting:**
+- 🔒 **Script execution disabled error?** Run this command in PowerShell first (allows temporary bypass):
+  ```powershell
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+  ```
+  Then run the setup script again.
+
 **Alternative - Local Script:**
 ```powershell
 # Download and run the setup script
