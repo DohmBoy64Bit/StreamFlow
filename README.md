@@ -54,6 +54,11 @@ irm https://raw.githubusercontent.com/DohmBoy64Bit/StreamFlow/new-task-ac30/setu
 - PowerShell (run as Administrator)
 - TMDB API key from https://www.themoviedb.org/settings/api
 
+**Important Notes:**
+- ⚠️ **System restart may be required** after installing WSL, Git, Python, or Node.js
+- After restart, **run the script again** - it will skip already-installed components and continue setup
+- The script is idempotent - safe to run multiple times
+
 **Alternative - Local Script:**
 ```powershell
 # Download and run the setup script
